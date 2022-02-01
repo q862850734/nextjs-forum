@@ -9,6 +9,7 @@ import {
 } from "nexus";
 import { DateTimeResolver } from "graphql-scalars";
 export const DateTime = asNexusMethod(DateTimeResolver, "date");
+import crypto from "crypto";
 // import { prisma } from "../lib/prisma";
 
 /* 账户 */
@@ -202,6 +203,29 @@ export const Query = extendType({
   },
 });
 
+/* 突变定义 */
+export const Mutation = extendType({
+  type: "Mutation",
+  definition(t) {
+    t.field("userSetPassword", {
+      type: "User",
+      args: {
+        password: nonNull(stringArg()),
+      },
+      resolve(_parent, { password }, { prisma, session }) {
+        // console.log(session);
+        if (!session) throw new Error(`您需要登录后才能执行操作`);
+
+        password = crypto.createHash("md5").update(password).digest("hex");
+
+        return prisma.user.update({
+          where: { email: session.user.email },
+          data: { password },
+        });
+      },
+    });
+  },
+});
 const Role = enumType({
   name: "Role",
   members: ["USER", "ADMIN"],

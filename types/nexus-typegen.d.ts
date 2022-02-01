@@ -59,6 +59,7 @@ export interface NexusGenObjects {
     user?: NexusGenRootTypes['User'] | null; // User
     userId?: string | null; // String
   }
+  Mutation: {};
   Post: { // root type
     authorId?: string | null; // String
     content?: string | null; // String
@@ -128,6 +129,9 @@ export interface NexusGenFieldTypes {
     type: string | null; // String
     user: NexusGenRootTypes['User'] | null; // User
     userId: string | null; // String
+  }
+  Mutation: { // field return type
+    userSetPassword: NexusGenRootTypes['User'] | null; // User
   }
   Post: { // field return type
     author: NexusGenRootTypes['User'] | null; // User
@@ -202,6 +206,9 @@ export interface NexusGenFieldTypeNames {
     user: 'User'
     userId: 'String'
   }
+  Mutation: { // field return type name
+    userSetPassword: 'User'
+  }
   Post: { // field return type name
     author: 'User'
     authorId: 'String'
@@ -260,6 +267,11 @@ export interface NexusGenFieldTypeNames {
 }
 
 export interface NexusGenArgTypes {
+  Mutation: {
+    userSetPassword: { // args
+      password: string; // String!
+    }
+  }
   Query: {
     postById: { // args
       id: number; // Int!
