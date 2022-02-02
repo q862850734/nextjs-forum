@@ -3,7 +3,39 @@ import faker from "@faker-js/faker";
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log(faker.internet.email());
+  // await prisma.community.createMany({
+  //   data: [
+  //     {
+  //       title: "网事杂谈",
+  //     },
+  //     {
+  //       title: "程序员职业交流",
+  //       description: "技术算法 业界新闻 职场经验",
+  //     },
+  //   ],
+  // });
+  await prisma.banner.createMany({
+    data: [
+      {
+        name: "test1",
+      },
+      {
+        name: "test2",
+      },
+      {
+        name: "test3",
+      },
+      {
+        name: "test4",
+      },
+      {
+        name: "test5",
+      },
+      {
+        name: "test6",
+      },
+    ],
+  });
   const test = await prisma.user.create({
     data: {
       email: faker.internet.email(),
@@ -26,6 +58,12 @@ async function main() {
             viewCount: faker.mersenne.rand(0, 1000),
             likesCount: faker.mersenne.rand(0, 1000),
             thumbnail: faker.image.image(),
+            forum: {
+              connectOrCreate: {
+                where: { title: "往事杂谈" },
+                create: { title: "往事再谈" },
+              },
+            },
             tags: {
               connectOrCreate: [
                 {
@@ -50,6 +88,12 @@ async function main() {
             viewCount: faker.mersenne.rand(0, 1000),
             likesCount: faker.mersenne.rand(0, 1000),
             thumbnail: faker.image.image(),
+            forum: {
+              connectOrCreate: {
+                where: { title: "程序员职业交流" },
+                create: { title: "程序员职业交流" },
+              },
+            },
             tags: {
               connectOrCreate: [
                 {

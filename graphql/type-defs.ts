@@ -141,6 +141,16 @@ export const Tag = objectType({
   },
 });
 
+export const Banner = objectType({
+  name: "Banner",
+  definition(t) {
+    t.int("id"), t.string("name");
+    t.string("image");
+    t.string("description");
+    t.string("url");
+  },
+});
+
 /* 查询定义 */
 export const Query = extendType({
   type: "Query",
@@ -158,14 +168,14 @@ export const Query = extendType({
       },
     });
     /* 查找所有用户 */
-    t.nonNull.list.field("allUsers", {
+    t.nonNull.list.field("users", {
       type: "User",
       resolve(_parent, _args, { prisma }) {
         return prisma.user.findMany();
       },
     });
     /* 查找所有文章 */
-    t.nonNull.list.field("allPosts", {
+    t.nonNull.list.field("posts", {
       type: "Post",
       resolve(_parent, _args, { prisma }) {
         return prisma.post.findMany({
@@ -190,7 +200,7 @@ export const Query = extendType({
       },
     });
     /* 查找所有标签 */
-    t.nonNull.list.field("allTags", {
+    t.nonNull.list.field("tags", {
       type: "Tag",
       resolve(_parent, _args, { prisma }) {
         return prisma.tag.findMany({
@@ -198,6 +208,14 @@ export const Query = extendType({
             posts: true,
           },
         });
+      },
+    });
+
+    /* 查找所有大图*/
+    t.list.field("banners", {
+      type: "Banner",
+      resolve(_parent, _args, { prisma }) {
+        return prisma.banner.findMany();
       },
     });
   },

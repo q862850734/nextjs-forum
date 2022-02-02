@@ -2,6 +2,9 @@ import type { NextPage } from "next";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
+import Layout from "../components/Layout";
+import Image from "next/image";
+import { Avatar, Box } from "@mui/material";
 
 const allUserQuery = gql`
   query Query {
@@ -37,9 +40,20 @@ const Test: NextPage = () => {
     mutateFunction({ variables: { password } });
   };
   return (
-    <div>
+    <Box>
       <h1>Test</h1>
-      {session?.user && <h2>{session.user["email"]}</h2>}
+      {session?.user && (
+        <div>
+          <h2>{session.user["email"]}</h2>
+          <Avatar>
+            <Image
+              layout="fill"
+              src={session.user["image"]}
+              alt={session.user["name"]}
+            />
+          </Avatar>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <input
@@ -49,7 +63,7 @@ const Test: NextPage = () => {
         />
         <button>提交</button>
       </form>
-    </div>
+    </Box>
   );
 };
 

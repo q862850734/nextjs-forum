@@ -106,6 +106,9 @@ model Post {
   isLiked    Boolean @default(false) @map("is_liked")
   tags       Tag[]
 
+  forum   Forum @relation(fields: [forumId], references: [id])
+  forumId Int   @map("community_id")
+
   @@map("posts")
 }
 
@@ -116,4 +119,49 @@ model Tag {
   posts       Post[]
 
   @@map("tags")
+}
+
+model Forum {
+  id          Int     @id @default(autoincrement())
+  title       String  @unique
+  subscribers Int     @default(0)
+  description String?
+  posts       Post[]
+  style       Style?
+  categoryId  Int     @map("category_id")
+
+  category ForumCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@map("forums")
+}
+
+model ForumCategory {
+  id    Int     @id @default(autoincrement())
+  name  String  @unique
+  icon  String?
+  forum Forum[]
+
+  @@map("forum_categories")
+}
+
+model Style {
+  id   Int    @id @default(autoincrement())
+  icon String @default("https://raw.githubusercontent.com/uid-vhan/notebook-imgs/main/imgs/favicon.ico")
+
+  forum   Forum @relation(fields: [forumId], references: [id])
+  forumId Int   @unique @map("forum_id")
+
+  primaryColor String @default("#FC471E")
+
+  @@map("style")
+}
+
+model Banner {
+  id          Int     @id @default(autoincrement())
+  name        String
+  image       String  @default("https://source.unsplash.com/random")
+  description String?
+  url         String?
+
+  @@map("banners")
 }

@@ -1,8 +1,34 @@
-import { ApolloClient, InMemoryCache } from "@apollo/client";
+import { useMemo } from "react";
+import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 
-const apolloClient = new ApolloClient({
-  uri: "http://localhost:3000/api/graphql",
-  cache: new InMemoryCache(),
-});
+let apolloClient;
+function createApolloClient() {
+  return new ApolloClient({
+    ssrMode: typeof window === "undefined", // set to true for SSR
+    link: new HttpLink({
+      uri: "http://localhost:3000/api/graphql",
+      credentials: "same-origin",
+    }),
+    cache: new InMemoryCache(),
+  });
+}
 
-export default apolloClient;
+export function initializeApollo(initialState = null) {
+  const _apolloClient = apolloClient ?? createApolloClient();
+
+  if (initialState) {
+    const existingCache = _apolloClient.extract();
+
+    _apolloClient.cache.restore({ ...existingCache, ...initialState });
+  }
+
+  if (typeof window === "undefined") return _apolloClient;
+
+  if (!apolloClient) apolloClient = _apolloClient;
+  return _apolloClient;
+}
+
+export function useApollo(initialState) {
+  const store = useMemo(() => initializeApollo(initialState), [initialState]);
+  return store;
+}
