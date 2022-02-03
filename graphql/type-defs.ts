@@ -119,7 +119,7 @@ export const Profile = objectType({
     t.string("background");
     t.field("user", {
       type: User,
-      resolve({ id }, _args, { prisma }) {
+      async resolve({ id }, _args, { prisma }) {
         return prisma.profile.findUnique({ where: { id } }).user();
       },
     });
@@ -144,10 +144,49 @@ export const Tag = objectType({
 export const Banner = objectType({
   name: "Banner",
   definition(t) {
-    t.int("id"), t.string("name");
+    t.int("id");
+    t.string("name");
     t.string("image");
     t.string("description");
     t.string("url");
+  },
+});
+
+/* 论坛 */
+export const Forum = objectType({
+  name: "Forum",
+  definition(t) {
+    t.int("id");
+    t.string("title");
+    t.string("subscribers");
+    t.string("description");
+    t.list.field("posts", {
+      type: Post,
+      async resolve({ id }, _args, { prisma }) {
+        return prisma.forum.findUnique({ where: { id } }).posts();
+      },
+    });
+    t.field("category", {
+      type: ForumCategory,
+      resolve({ id }, _args, { prisma }) {
+        return prisma.profile.findUnique({ where: { id } }).user();
+      },
+    });
+  },
+});
+
+/* 论坛分类 */
+export const ForumCategory = objectType({
+  name: "ForumCategory",
+  definition(t) {
+    t.int("id"), t.string("name");
+    t.string("icon");
+    t.list.field("forum", {
+      type: Forum,
+      async resolve({ id }, _args, { prisma }) {
+        return prisma.forumCategory.findUnique({ where: { id } }).forum();
+      },
+    });
   },
 });
 
@@ -170,14 +209,14 @@ export const Query = extendType({
     /* 查找所有用户 */
     t.nonNull.list.field("users", {
       type: "User",
-      resolve(_parent, _args, { prisma }) {
+      resolve(_, __, { prisma }) {
         return prisma.user.findMany();
       },
     });
     /* 查找所有文章 */
     t.nonNull.list.field("posts", {
       type: "Post",
-      resolve(_parent, _args, { prisma }) {
+      resolve(_, __, { prisma }) {
         return prisma.post.findMany({
           include: {
             tags: true,
@@ -185,12 +224,39 @@ export const Query = extendType({
         });
       },
     });
+    /* 查找热门文章 */
+    t.nonNull.list.field("hotPosts", {
+      type: "Post",
+      args: {
+        take: intArg(),
+        time: intArg(),
+      },
+      resolve(_, { take = 10, time = 7 }, { prisma }) {
+        const now = new Date();
+        return prisma.post.findMany({
+          take,
+          where: {
+            createdAt: {
+              gte: new Date(now.getTime() - time * 24 * 60 * 60000),
+              lt: now,
+            },
+          },
+          orderBy: {
+            viewCount: "desc",
+          },
+          include: {
+            tags: true,
+          },
+        });
+      },
+    });
+    /* 按ID查找文章 */
     t.nullable.field("postById", {
       type: "Post",
       args: {
         id: nonNull(intArg()),
       },
-      resolve(_parent, { id }, { prisma }) {
+      resolve(_, { id }, { prisma }) {
         return prisma.post.findUnique({
           where: { id },
           include: {
@@ -202,7 +268,7 @@ export const Query = extendType({
     /* 查找所有标签 */
     t.nonNull.list.field("tags", {
       type: "Tag",
-      resolve(_parent, _args, { prisma }) {
+      resolve(_, __, { prisma }) {
         return prisma.tag.findMany({
           include: {
             posts: true,
@@ -214,8 +280,26 @@ export const Query = extendType({
     /* 查找所有大图*/
     t.list.field("banners", {
       type: "Banner",
-      resolve(_parent, _args, { prisma }) {
+      resolve(_, __, { prisma }) {
         return prisma.banner.findMany();
+      },
+    });
+
+    /* 查找所有论坛分类 */
+    t.list.field("forumCategories", {
+      type: "ForumCategory",
+      resolve(_, __, { prisma }) {
+        return prisma.forumCategory.findMany();
+      },
+    });
+    /* 按ID查找对应论坛 */
+    t.field("forumById", {
+      type: "Forum",
+      args: {
+        id: nonNull(intArg()),
+      },
+      resolve(_, { id }, { prisma }) {
+        return prisma.forum.findUnique({ where: { id } });
       },
     });
   },

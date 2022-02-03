@@ -1,72 +1,56 @@
 import { useState, useMemo, createContext } from "react";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
 import {
-  amber,
-  blue,
-  deepOrange,
-  grey,
-  pink,
-  indigo,
-} from "@mui/material/colors";
-import { PaletteMode } from "@mui/material";
+  ThemeProvider,
+  createTheme,
+  PaletteOptions,
+} from "@mui/material/styles";
 
-const Themes = [
+export const Themes: Array<PaletteOptions> = [
   {
-    type: "dark",
-    palette: {
-      primary: {
-        main: "#565a72",
-        contrastText: "#f7d6ca",
-      },
-      secondary: {
-        main: "#8387a1",
-        contrastText: "#fffffd",
-      },
-      background: {
-        default: "#2c3147",
-        paper: "#434343",
-      },
-      text: {
-        primary: "#f7d6ca",
-        secondary: "rgba(255, 255, 255, 0.7)",
-        disabled: "rgba(255, 255, 255, 0.5)",
-        hint: "rgba(255, 255, 255, 0.5)",
-      },
-    },
+    mode: "light",
   },
   {
-    type: "light",
+    mode: "dark",
+  },
+  {
+    mode: "light",
     primary: {
-      main: "#342bad",
-      contrastText: "#FA9AF2",
+      main: "#565a72",
+      contrastText: "#f7d6ca",
     },
     secondary: {
-      main: "#6e56e0",
-      contrastText: "#ffccff",
-    },
-    text: {
-      primary: "rgba(203,20,65,0.87)",
-      secondary: "rgba(214,81,114,0.54)",
-      disabled: "rgba(214,81,114,0.38)",
-      hinit: "rgba(214,81,114,0.38)",
+      main: "#8387a1",
+      contrastText: "#fffffd",
     },
     background: {
-      default: "#efb5a5",
-      paper: "#f9f9f7",
+      default: "#2c3147",
+      paper: "#434343",
+    },
+    text: {
+      primary: "#f7d6ca",
+      secondary: "rgba(255,255, 255, 0.7)",
+      disabled: "rgba(255, 255, 255, 0.5)",
     },
   },
   {
+    mode: "dark",
     primary: {
-      main: "#072227",
-      contrastText: "#AEFEFF",
+      main: "#444756",
+      contrastText: "#c3e4fa",
+      dark: "#515260",
     },
     secondary: {
-      main: "#35858B",
-      contrastText: "#AEFEFF",
+      main: "#fff",
+      contrastText: "#fff",
+    },
+    text: {
+      primary: "#c3e4fa",
+      secondary: "rgba(195, 228, 250, 0.7)",
+      disabled: "rgba(255, 255, 255, 0.5)",
     },
   },
   {
-    type: "light",
+    mode: "dark",
     primary: {
       main: "#444756",
       contrastText: "#c3e4fa",
@@ -77,20 +61,39 @@ const Themes = [
       contrastText: "#fff",
     },
   },
+  {
+    mode: "light",
+    primary: {
+      main: "#1a1a40",
+      contrastText: "#fa58b6",
+    },
+    secondary: {
+      main: "#270082",
+      contrastText: "#7a0bc0",
+    },
+    text: {
+      primary: "#fa58b6",
+      secondary: "rgba(255,255, 255, 0.7)",
+      disabled: "rgba(255, 255, 255, 0.5)",
+    },
+  },
 ];
 
-export const ColorModeContext = createContext({ toggleColorMode: () => {} });
+export const ColorModeContext = createContext({
+  toggleColorMode: (mode: number) => {},
+});
 const getDesignTokens = (mode: number) => ({
   palette: {
-    ...Themes[1],
+    ...Themes[mode],
   },
 });
 export default function ToggleColorMode({ children }) {
   const [mode, setMode] = useState(0);
+
   const colorMode = useMemo(
     () => ({
-      toggleColorMode: () => {
-        setMode(3);
+      toggleColorMode: (mode) => {
+        setMode(mode);
       },
     }),
     []

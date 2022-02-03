@@ -24,7 +24,7 @@ const setPassword = gql`
   }
 `;
 
-const Test: NextPage = () => {
+export default function Test() {
   const [mutateFunction, { loading, error }] = useMutation(setPassword, {
     onCompleted: () => reset(),
   });
@@ -65,6 +65,4 @@ const Test: NextPage = () => {
       </form>
     </Box>
   );
-};
-
-export default Test;
+}

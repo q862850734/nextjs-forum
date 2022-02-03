@@ -12,7 +12,6 @@ export async function createContext({ req }): Promise<Context> {
   // console.log(req);
 
   const session = await getSession({ req });
-  console.log("Session", JSON.stringify(session, null, 2));
 
   if (!session) return { prisma };
 

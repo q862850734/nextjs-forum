@@ -1,22 +1,25 @@
-import { useContext, useState, MouseEvent } from "react";
-import { useTheme } from "@mui/material/styles";
+import { useState, MouseEvent } from "react";
+
 import { signIn, signOut, useSession } from "next-auth/react";
-import Brightness4Icon from "@mui/icons-material/Brightness4";
-import Brightness7Icon from "@mui/icons-material/Brightness7";
+
 import RouteLink from "../../RouteLink";
 import {
+  Button,
   Box,
   IconButton,
   Avatar as UserAvatar,
   Menu,
   MenuItem,
+  Divider,
+  Stack,
+  Typography,
 } from "@mui/material";
-import { ColorModeContext } from "../../AppProvider";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import LoginIcon from "@mui/icons-material/Login";
+import LogoutIcon from "@mui/icons-material/Logout";
 import Image from "next/image";
 
 export default function Avatar() {
-  const theme = useTheme();
-  const colorMode = useContext(ColorModeContext);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -50,15 +53,22 @@ export default function Avatar() {
         }}
       >
         <MenuItem onClick={handleClose}>
-          <RouteLink href="/" title="个人主页" />
+          <Stack direction="row" spacing={2}>
+            <AccountCircleIcon />
+            <RouteLink href="/" title="个人主页" />
+          </Stack>
         </MenuItem>
+        <Divider />
         {session ? (
           <MenuItem
             onClick={() => {
               signOut();
             }}
           >
-            退出登录
+            <Stack direction="row" spacing={2}>
+              <LogoutIcon />
+              <Typography>退出登录</Typography>
+            </Stack>
           </MenuItem>
         ) : (
           <MenuItem
@@ -66,18 +76,12 @@ export default function Avatar() {
               signIn();
             }}
           >
-            登录/注册
+            <Stack direction="row" spacing={2}>
+              <LoginIcon />
+              <Typography>登录/注册</Typography>
+            </Stack>
           </MenuItem>
         )}
-        <MenuItem onClick={handleClose}>
-          <IconButton onClick={colorMode.toggleColorMode} color="inherit">
-            {theme.palette.mode === "dark" ? (
-              <Brightness7Icon />
-            ) : (
-              <Brightness4Icon />
-            )}
-          </IconButton>
-        </MenuItem>
       </Menu>
     </Box>
   );

@@ -14,6 +14,8 @@ export default function Nav() {
       sx={{
         width: "100%",
         display: "flex",
+        height: "6vh",
+        alignItems: "center",
       }}
       component="nav"
     >

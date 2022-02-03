@@ -11,7 +11,7 @@ import "../styles/globals.css";
 import Layout from "../components/Layout";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const apolloClient = useApollo(pageProps.initialApolloState);
+  const apolloClient = useApollo(pageProps);
   return (
     <SessionProvider session={pageProps.session}>
       <ApolloProvider client={apolloClient}>

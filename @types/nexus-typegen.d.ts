@@ -66,6 +66,17 @@ export interface NexusGenObjects {
     name?: string | null; // String
     url?: string | null; // String
   }
+  Forum: { // root type
+    description?: string | null; // String
+    id?: number | null; // Int
+    subscribers?: string | null; // String
+    title?: string | null; // String
+  }
+  ForumCategory: { // root type
+    icon?: string | null; // String
+    id?: number | null; // Int
+    name?: string | null; // String
+  }
   Mutation: {};
   Post: { // root type
     authorId?: string | null; // String
@@ -144,6 +155,20 @@ export interface NexusGenFieldTypes {
     name: string | null; // String
     url: string | null; // String
   }
+  Forum: { // field return type
+    category: NexusGenRootTypes['ForumCategory'] | null; // ForumCategory
+    description: string | null; // String
+    id: number | null; // Int
+    posts: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
+    subscribers: string | null; // String
+    title: string | null; // String
+  }
+  ForumCategory: { // field return type
+    forum: Array<NexusGenRootTypes['Forum'] | null> | null; // [Forum]
+    icon: string | null; // String
+    id: number | null; // Int
+    name: string | null; // String
+  }
   Mutation: { // field return type
     userSetPassword: NexusGenRootTypes['User'] | null; // User
   }
@@ -176,6 +201,9 @@ export interface NexusGenFieldTypes {
   }
   Query: { // field return type
     banners: Array<NexusGenRootTypes['Banner'] | null> | null; // [Banner]
+    forumById: NexusGenRootTypes['Forum'] | null; // Forum
+    forumCategories: Array<NexusGenRootTypes['ForumCategory'] | null> | null; // [ForumCategory]
+    hotPosts: Array<NexusGenRootTypes['Post'] | null>; // [Post]!
     postById: NexusGenRootTypes['Post'] | null; // Post
     posts: Array<NexusGenRootTypes['Post'] | null>; // [Post]!
     tags: Array<NexusGenRootTypes['Tag'] | null>; // [Tag]!
@@ -228,6 +256,20 @@ export interface NexusGenFieldTypeNames {
     name: 'String'
     url: 'String'
   }
+  Forum: { // field return type name
+    category: 'ForumCategory'
+    description: 'String'
+    id: 'Int'
+    posts: 'Post'
+    subscribers: 'String'
+    title: 'String'
+  }
+  ForumCategory: { // field return type name
+    forum: 'Forum'
+    icon: 'String'
+    id: 'Int'
+    name: 'String'
+  }
   Mutation: { // field return type name
     userSetPassword: 'User'
   }
@@ -260,6 +302,9 @@ export interface NexusGenFieldTypeNames {
   }
   Query: { // field return type name
     banners: 'Banner'
+    forumById: 'Forum'
+    forumCategories: 'ForumCategory'
+    hotPosts: 'Post'
     postById: 'Post'
     posts: 'Post'
     tags: 'Tag'
@@ -296,6 +341,13 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
+    forumById: { // args
+      id: number; // Int!
+    }
+    hotPosts: { // args
+      take?: number | null; // Int
+      time?: number | null; // Int
+    }
     postById: { // args
       id: number; // Int!
     }

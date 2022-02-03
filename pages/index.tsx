@@ -6,7 +6,8 @@ import HeadTitle from "../components/HeadTitle";
 import { gql } from "@apollo/client";
 import { initializeApollo } from "../lib/apollo";
 import SwipeBanner from "../components/SwipeBanner";
-
+import ForumCategory from "../components/Home/ForumCategory";
+import HotList from "../components/Home/HotList";
 function Item(props: BoxProps) {
   const { sx, ...other } = props;
   return (
@@ -17,7 +18,7 @@ function Item(props: BoxProps) {
         borderRadius: 2,
         fontSize: "0.875rem",
         fontWeight: "700",
-        height: "30%",
+        height: 1,
         ...sx,
       }}
       {...other}
@@ -25,10 +26,30 @@ function Item(props: BoxProps) {
   );
 }
 
-const BANNERS = gql`
-  query Query {
+const HOME_INFO = gql`
+  query Query($take: Int) {
     banners {
       image
+      name
+      description
+      url
+    }
+    forumCategories {
+      name
+      icon
+      forum {
+        id
+        title
+        description
+      }
+    }
+    hotPosts(take: $take) {
+      createdAt
+      thumbnail
+      viewCount
+      id
+      title
+      description
     }
   }
 `;
@@ -36,46 +57,73 @@ const BANNERS = gql`
 export async function getStaticProps() {
   const apolloClient = initializeApollo();
 
-  await apolloClient.query({
-    query: BANNERS,
+  const { data } = await apolloClient.query({
+    query: HOME_INFO,
+    variables: {
+      take: 6,
+    },
   });
 
   return {
     props: {
-      initialApolloState: apolloClient.cache.extract(),
+      data,
     },
+    revalidate: 60,
   };
 }
 
-export default function Home({ initialApolloState: { ROOT_QUERY } }) {
-  const { banners } = ROOT_QUERY;
+export default function Home({ data }) {
+  const { banners, forumCategories, hotPosts } = data;
 
   return (
-    <>
+    <Box
+      sx={{
+        width: 1,
+        height: 1,
+      }}
+      component="main"
+    >
       <HeadTitle title="首页" />
+      <Grid
+        container
+        spacing={{ xs: 2, sm: 0.5, md: 1 }}
+        columns={{ xs: 4, sm: 8, md: 12 }}
+        sx={{
+          width: 1,
+          height: 4 / 10,
+        }}
+      >
+        <Grid item xs={4} sm={5} md={8}>
+          <Item
+            sx={{
+              background:
+                "url(https://uploadstatic.mihoyo.com/contentweb/20200211/2020021114220951905.jpg)",
+            }}
+          >
+            <SwipeBanner banners={banners} />
+          </Item>
+        </Grid>
+        <Grid item xs={4} sm={3} md={4}>
+          <Item sx={{ bgcolor: "primary.light" }}>
+            <HotList data={hotPosts} />
+          </Item>
+        </Grid>
+      </Grid>
       <Box
         sx={{
           width: 1,
-          height: 1,
+          height: 2 / 3,
           display: "grid",
           gridAutoColumns: "1fr",
           gap: 1,
         }}
       >
-        <Item
-          sx={{
-            gridRow: "1",
-            gridColumn: "span 3",
-            background:
-              "url(https://uploadstatic.mihoyo.com/contentweb/20200211/2020021114220951905.jpg)",
-          }}
-        >
-          <SwipeBanner banners={banners} />
-        </Item>
-        <Item sx={{ gridRow: "1", gridColumn: "4 / 5", bgcolor: "blue" }}>
-          4 / 5
+        <Item sx={{ gridRow: "2", gridColumn: "span 3", height: 1 / 3 }}>
+          {forumCategories.map((x) => (
+            <ForumCategory {...x} key={x.name} />
+          ))}
         </Item>
       </Box>
-    </>
+    </Box>
   );
 }

@@ -12,20 +12,20 @@ export default function Layout({ children, title = "Next Forum" }) {
       <CssBaseline />
       <Box
         sx={{
-          height: "100vh",
-          display: "flex",
-          flexDirection: "column",
+          width: 1,
+          height: 1,
         }}
       >
-        <Header />
+        <Header sx={{ height: "6vh" }} />
         <Container
           maxWidth="lg"
           sx={{
-            height: "100%",
-            flex: "1",
+            width: 1,
+            height: "94vh",
             p: 1,
             overflow: "auto",
           }}
+          component="main"
         >
           {children}
         </Container>

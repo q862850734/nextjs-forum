@@ -24,7 +24,13 @@ export default function SwipeBanner({ banners, delay = 3500, option = {} }) {
     >
       {banners.map((x: NexusGenFieldTypes["Banner"]) => (
         <SwiperSlide key={x.image}>
-          <Image layout="fill" objectFit="contain" src={x.image} alt={x.name} />
+          <Image
+            layout="fill"
+            objectFit="contain"
+            src={x.image}
+            alt={x.name}
+            title={x.description || ""}
+          />
         </SwiperSlide>
       ))}
     </Swiper>

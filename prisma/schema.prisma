@@ -78,9 +78,7 @@ enum Role {
 model Profile {
   id         Int     @id @default(autoincrement())
   userId     String  @unique @map("user_id")
-  name       String?
   bio        String?
-  avatar     String?
   banner     String?
   background String?
 

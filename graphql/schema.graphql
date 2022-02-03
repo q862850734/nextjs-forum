@@ -31,6 +31,22 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 """
 scalar DateTime
 
+type Forum {
+  category: ForumCategory
+  description: String
+  id: Int
+  posts: [Post]
+  subscribers: String
+  title: String
+}
+
+type ForumCategory {
+  forum: [Forum]
+  icon: String
+  id: Int
+  name: String
+}
+
 type Mutation {
   userSetPassword(password: String!): User
 }
@@ -66,6 +82,9 @@ type Profile {
 
 type Query {
   banners: [Banner]
+  forumById(id: Int!): Forum
+  forumCategories: [ForumCategory]
+  hotPosts(take: Int, time: Int): [Post]!
   postById(id: Int!): Post
   posts: [Post]!
   tags: [Tag]!
