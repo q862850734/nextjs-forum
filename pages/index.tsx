@@ -1,14 +1,15 @@
-import type { NextPage } from "next";
 import { Box, Grid, Paper } from "@mui/material";
+import { memo } from "react";
 import { BoxProps } from "@mui/material/Box";
-import { styled } from "@mui/material/styles";
-import HeadTitle from "../components/HeadTitle";
+
 import { gql } from "@apollo/client";
 import { initializeApollo } from "../lib/apollo";
+import HeadTitle from "../components/HeadTitle";
 import SwipeBanner from "../components/SwipeBanner";
 import ForumCategory from "../components/Home/ForumCategory";
 import HotList from "../components/Home/HotList";
-function Item(props: BoxProps) {
+
+const Item = memo(function item(props: BoxProps) {
   const { sx, ...other } = props;
   return (
     <Box
@@ -24,7 +25,7 @@ function Item(props: BoxProps) {
       {...other}
     />
   );
-}
+});
 
 const HOME_INFO = gql`
   query Query($take: Int) {

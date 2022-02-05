@@ -1,10 +1,12 @@
+import { memo } from "react";
 import { Box, Typography } from "@mui/material";
 import RouteLink from "../RouteLink";
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
-
-export default function HotList({ data }) {
-  console.log(data);
-
+import { Post } from "@prisma/client";
+interface Props {
+  data: Post[];
+}
+export default memo(function HotList({ data }: Props) {
   return (
     <Box
       sx={{
@@ -31,4 +33,4 @@ export default function HotList({ data }) {
       ))}
     </Box>
   );
-}
+});

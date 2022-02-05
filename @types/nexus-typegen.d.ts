@@ -68,6 +68,7 @@ export interface NexusGenObjects {
   }
   Forum: { // root type
     description?: string | null; // String
+    icon?: string | null; // String
     id?: number | null; // Int
     subscribers?: string | null; // String
     title?: string | null; // String
@@ -158,6 +159,7 @@ export interface NexusGenFieldTypes {
   Forum: { // field return type
     category: NexusGenRootTypes['ForumCategory'] | null; // ForumCategory
     description: string | null; // String
+    icon: string | null; // String
     id: number | null; // Int
     posts: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
     subscribers: string | null; // String
@@ -170,6 +172,7 @@ export interface NexusGenFieldTypes {
     name: string | null; // String
   }
   Mutation: { // field return type
+    addPost: NexusGenRootTypes['Post'] | null; // Post
     userSetPassword: NexusGenRootTypes['User'] | null; // User
   }
   Post: { // field return type
@@ -203,6 +206,7 @@ export interface NexusGenFieldTypes {
     banners: Array<NexusGenRootTypes['Banner'] | null> | null; // [Banner]
     forumById: NexusGenRootTypes['Forum'] | null; // Forum
     forumCategories: Array<NexusGenRootTypes['ForumCategory'] | null> | null; // [ForumCategory]
+    forums: Array<NexusGenRootTypes['Forum'] | null> | null; // [Forum]
     hotPosts: Array<NexusGenRootTypes['Post'] | null>; // [Post]!
     postById: NexusGenRootTypes['Post'] | null; // Post
     posts: Array<NexusGenRootTypes['Post'] | null>; // [Post]!
@@ -259,6 +263,7 @@ export interface NexusGenFieldTypeNames {
   Forum: { // field return type name
     category: 'ForumCategory'
     description: 'String'
+    icon: 'String'
     id: 'Int'
     posts: 'Post'
     subscribers: 'String'
@@ -271,6 +276,7 @@ export interface NexusGenFieldTypeNames {
     name: 'String'
   }
   Mutation: { // field return type name
+    addPost: 'Post'
     userSetPassword: 'User'
   }
   Post: { // field return type name
@@ -304,6 +310,7 @@ export interface NexusGenFieldTypeNames {
     banners: 'Banner'
     forumById: 'Forum'
     forumCategories: 'ForumCategory'
+    forums: 'Forum'
     hotPosts: 'Post'
     postById: 'Post'
     posts: 'Post'
@@ -336,6 +343,12 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    addPost: { // args
+      content?: string | null; // String
+      description?: string | null; // String
+      forum?: string | null; // String
+      title?: string | null; // String
+    }
     userSetPassword: { // args
       password: string; // String!
     }

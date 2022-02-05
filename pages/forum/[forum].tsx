@@ -4,6 +4,7 @@ import { gql, useQuery } from "@apollo/client";
 import { initializeApollo } from "../../lib/apollo";
 import { Box, Typography } from "@mui/material";
 import { useRouter } from "next/router";
+import RouteLink from "../../components/RouteLink";
 
 const FORUM_BY_ID = gql`
   query ForumById($forumByIdId: Int!) {
@@ -54,9 +55,7 @@ export default function Forum({ forumById: { posts } }) {
 
       {posts &&
         posts.map((x) => (
-          <Typography component="section" key={x.id}>
-            {x.title}
-          </Typography>
+          <RouteLink key={x.id} href={`/posts/${x.id}`} title={x.title} />
         ))}
     </Box>
   );

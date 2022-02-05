@@ -27,8 +27,8 @@ export default function ForumCategory({
         {name}
       </Typography>
       <Grid container spacing={3}>
-        {forum.map((x: NexusGenFieldTypes["Forum"]) => (
-          <ForumCard key={x.id} {...x} />
+        {forum.map((x) => (
+          <ForumCard key={x.id} data={x} option={{ xs: 4 }} />
         ))}
       </Grid>
     </Box>

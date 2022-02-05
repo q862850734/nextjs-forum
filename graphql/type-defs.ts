@@ -6,6 +6,8 @@ import {
   extendType,
   stringArg,
   intArg,
+  inputObjectType,
+  list,
 } from "nexus";
 import { DateTimeResolver } from "graphql-scalars";
 export const DateTime = asNexusMethod(DateTimeResolver, "date");
@@ -160,6 +162,7 @@ export const Forum = objectType({
     t.string("title");
     t.string("subscribers");
     t.string("description");
+    t.string("icon");
     t.list.field("posts", {
       type: Post,
       async resolve({ id }, _args, { prisma }) {
@@ -284,7 +287,13 @@ export const Query = extendType({
         return prisma.banner.findMany();
       },
     });
-
+    /* 查找所有论坛 */
+    t.list.field("forums", {
+      type: "Forum",
+      resolve(_, __, { prisma }) {
+        return prisma.forum.findMany();
+      },
+    });
     /* 查找所有论坛分类 */
     t.list.field("forumCategories", {
       type: "ForumCategory",
@@ -323,6 +332,37 @@ export const Mutation = extendType({
         return prisma.user.update({
           where: { email: session.user.email },
           data: { password },
+        });
+      },
+    });
+
+    t.field("addPost", {
+      type: "Post",
+      args: {
+        title: stringArg(),
+        description: stringArg(),
+        content: stringArg(),
+        forum: stringArg(),
+      },
+      resolve(_, { forum, ...other }, { prisma, session }) {
+        if (!session) throw new Error(`您需要登录后才能执行操作`);
+        return prisma.post.create({
+          data: {
+            ...other,
+            forum: {
+              connect: {
+                title: forum,
+              },
+            },
+            author: {
+              connect: {
+                email: session.user.email,
+              },
+            },
+          },
+          include: {
+            forum: true,
+          },
         });
       },
     });

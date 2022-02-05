@@ -1,24 +1,26 @@
-import * as React from "react";
-import { useTheme } from "@mui/material/styles";
-import { Box, Grid, Card, CardContent, Typography } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Card,
+  CardContent,
+  Typography,
+  BoxProps,
+  GridProps,
+} from "@mui/material";
 import RouteLink from "../RouteLink";
+import { NexusGenObjects } from "../../@types/nexus-typegen";
+
+interface Props {
+  data: NexusGenObjects["Forum"];
+  option?: GridProps;
+}
 
 export default function MediaControlCard({
-  id,
-  title,
-  description,
-  sx = {},
-  option = { xs: 4 },
-}) {
-  const theme = useTheme();
-  console.log(id);
-
+  data: { id, title, description },
+  option = {},
+}: Props) {
   return (
-    <Grid
-      item
-      {...option}
-      sx={{ display: "flex", flexDirection: "column", ...sx }}
-    >
+    <Grid item {...option} sx={{ display: "flex", flexDirection: "column" }}>
       <Box sx={{ p: 2 }}>
         <RouteLink
           href={`/forum/${id}`}

@@ -1,42 +1,33 @@
 ## 说明
 
-
-
 ### 介绍
 
 > 基于 Next Js 同构的 "论坛" 项目
 
-
-
 ### 技术栈
 
-- Next Js  `React 服务端渲染框架`
-- Prisma  `数据库 ORM`
+- Next Js `React 服务端渲染框架`
+- Prisma `数据库 ORM`
 - Nexus `用于生成 GraphQL schema`
 - Apollo Server `GraphQL 服务器`
 - Apollo Client `GraphQL 客户端`
 - Next-Auth `身份验证的第三方库`
 - Material UI `React UI 组件库`
 
-
-
 ### 完成度
 
 - 首页简单的渲染了一下，GraphQL 是真的好用， 不过写 type 是真的头疼。
 - 可以切换主题（配色略丑）
 - 可以邮箱和 github 登录（需要配置 .env 环境变量）
-
-
-
-
+- 首页论坛版块 -> 论坛（ 一些帖子 ）-> 点击帖子跳转对应页面
+- 添加了发帖功能，使用 Braft-editor 实现富文本编辑
+- 插入图片自动上传图床（图床需要额外配置，我是开了一仓库专门放图片，本来用 base64 直接存数据库的，base64 页面渲染会严重卡顿）
 
 ## 安装依赖
 
 ```bash
 npm i
 ```
-
-
 
 ## 数据库部署
 
@@ -62,11 +53,14 @@ EMAIL_FROM=noreply@example.com
 GITHUB_ID=
 GITHUB_SECRET=
 
+# GitHub 图床仓库设置
+GITHUB_PERSONAL_ACCESS_TOKEN= # token
+GITHUB_REPO_OWNER= # 用户名
+GITHUB_REPO= # 仓库名
+
 NEXTAUTH_URL=http://localhost:3000
 SECRET= # Linux: `openssl rand -hex 32` or go to https://generate-secret.now.sh/32
 ```
-
-
 
 ### 2. 初始化数据库
 
@@ -74,10 +68,6 @@ SECRET= # Linux: `openssl rand -hex 32` or go to https://generate-secret.now.sh/
 npx prisma migrate dev # 初始化后自动执行 prisma/seed.ts 添加Mockjs生成的假数据
 npx prisma studio # 可快速访问数据库
 ```
-
-
-
-
 
 ## 运行
 

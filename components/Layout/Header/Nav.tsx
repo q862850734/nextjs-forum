@@ -22,6 +22,7 @@ export default function Nav() {
       <RouteLink option={option} title="首页" href="/" />
       <RouteLink option={option} title="测试" href="/test" />
       <RouteLink option={option} title="排版" href="/typography" />
+      <RouteLink option={option} title="发帖" href="/create" />
     </Box>
   );
 }

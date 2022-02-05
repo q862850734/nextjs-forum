@@ -17,7 +17,20 @@ import {
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
+import NoteAddIcon from "@mui/icons-material/NoteAdd";
+import EditIcon from "@mui/icons-material/Edit";
 import Image from "next/image";
+
+function Item({ href, title, children }) {
+  return (
+    <MenuItem>
+      <Stack direction="row" spacing={2}>
+        {children}
+        <RouteLink href={href} title={title} />
+      </Stack>
+    </MenuItem>
+  );
+}
 
 export default function Avatar() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -52,36 +65,19 @@ export default function Avatar() {
           "aria-labelledby": "basic-button",
         }}
       >
-        <MenuItem onClick={handleClose}>
-          <Stack direction="row" spacing={2}>
-            <AccountCircleIcon />
-            <RouteLink href="/" title="个人主页" />
-          </Stack>
-        </MenuItem>
+        <Item href="/" title="个人主页">
+          <AccountCircleIcon />
+        </Item>
+        <Item href="/create" title="发帖">
+          <EditIcon />
+        </Item>
         <Divider />
-        {session ? (
-          <MenuItem
-            onClick={() => {
-              signOut();
-            }}
-          >
-            <Stack direction="row" spacing={2}>
-              <LogoutIcon />
-              <Typography>退出登录</Typography>
-            </Stack>
-          </MenuItem>
-        ) : (
-          <MenuItem
-            onClick={() => {
-              signIn();
-            }}
-          >
-            <Stack direction="row" spacing={2}>
-              <LoginIcon />
-              <Typography>登录/注册</Typography>
-            </Stack>
-          </MenuItem>
-        )}
+        <Item
+          href={"/api/auth/" + (session ? "signout" : "signin")}
+          title={session ? "退出登录" : "登录/注册"}
+        >
+          {session ? <LogoutIcon /> : <LoginIcon />}
+        </Item>
       </Menu>
     </Box>
   );

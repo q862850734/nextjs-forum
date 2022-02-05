@@ -88,7 +88,7 @@ const getDesignTokens = (mode: number) => ({
   },
 });
 export default function ToggleColorMode({ children }) {
-  const [mode, setMode] = useState(0);
+  const [mode, setMode] = useState(2);
 
   const colorMode = useMemo(
     () => ({

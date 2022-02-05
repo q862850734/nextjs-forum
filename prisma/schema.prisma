@@ -124,6 +124,7 @@ model Forum {
   title       String  @unique
   subscribers Int     @default(0)
   description String?
+  icon        String  @default("http://placeimg.com/300/300")
   posts       Post[]
   style       Style?
   categoryId  Int     @map("category_id")

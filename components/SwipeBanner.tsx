@@ -1,19 +1,21 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper";
-import { Box } from "@mui/material";
+import { memo } from "react";
 import Image from "next/image";
 import "swiper/css";
 import "swiper/css/pagination";
 import { NexusGenFieldTypes } from "../@types/nexus-typegen";
+import { Banner } from "@prisma/client";
 
-export default function SwipeBanner({ banners, delay = 3500, option = {} }) {
-  console.log(banners);
+interface Props {
+  banners: Banner[];
+  delay?: number;
+}
 
+export default memo(function SwipeBanner({ banners, delay = 3500 }: Props) {
   return (
     <Swiper
       style={{ width: "100%", height: "100%" }}
-      onSlideChange={() => console.log("slide change")}
-      onSwiper={(swiper) => console.log(swiper)}
       modules={[Pagination, Autoplay]}
       pagination={{ clickable: true }}
       autoplay={{
@@ -35,4 +37,4 @@ export default function SwipeBanner({ banners, delay = 3500, option = {} }) {
       ))}
     </Swiper>
   );
-}
+});
