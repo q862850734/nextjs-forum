@@ -1,10 +1,11 @@
+//@ts-nocheck
 import { ApolloServer } from "apollo-server-micro";
 import schema from "../../schema";
 import { createContext } from "../../schema/context";
 import Cors from "micro-cors";
 
 const cors = Cors();
-//@ts-ignore
+
 const apolloServer = new ApolloServer({ schema, context: createContext });
 const startServer = apolloServer.start();
 
