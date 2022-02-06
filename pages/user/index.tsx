@@ -10,7 +10,6 @@ import BaseHead from "components/BaseHead";
 import BaseCard from "components/BaseCard";
 import BaseWrap from "components/BaseWrap";
 import Image from "next/image";
-import { User } from "graphql/type-defs";
 import { NexusGenObjects } from "../../@types/nexus-typegen";
 import PostCard from "components/PostCard";
 
