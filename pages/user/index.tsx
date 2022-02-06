@@ -4,8 +4,6 @@ import { gql, useQuery, useMutation } from "@apollo/client";
 import { initializeApollo } from "../../lib/apollo";
 import { useForm } from "react-hook-form";
 
-import { Box, Typography, Avatar } from "@mui/material";
-import { Component } from "react";
 import BaseHead from "components/BaseHead";
 import BaseCard from "components/BaseCard";
 import BaseWrap from "components/BaseWrap";
