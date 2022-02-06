@@ -8,9 +8,8 @@
     "dev": "next dev",
     "start": "next start",
     "lint": "next lint",
-    "build:nexus-typegen": "ts-node --compiler-options  \"{\\\"module\\\":\\\"commonjs\\\"}\" --transpile-only schema",
-    "build": "npm run build:nexus-typegen && next build"
-
+    "build": "next build",
+    "nexus:gen": "ts-node --transpile-only --compiler-options '{\"module\":\"CommonJS\"}' schema"
   },
   "dependencies": {
     "@apollo/client": "^3.5.8",

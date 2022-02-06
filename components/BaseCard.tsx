@@ -1,6 +1,10 @@
-import { Box } from "@mui/material";
-
-const BaseCard = ({ children, sx = {} }) => {
+import React from "react";
+import { Box, SxProps } from "@mui/material";
+interface Props {
+  children: React.ReactNode;
+  sx?: SxProps;
+}
+const BaseCard = ({ children, sx = {} }: Props) => {
   return (
     <Box
       sx={{

@@ -1,8 +1,12 @@
 import React from "react";
 import { Box, Typography, Avatar } from "@mui/material";
 import Image from "next/image";
-
-const BaseHead = ({ title, icon, description = "" }) => {
+interface Props {
+  title: string;
+  icon: string;
+  description?: string;
+}
+const BaseHead = ({ title, icon, description = "" }: Props) => {
   return (
     <Box
       sx={{

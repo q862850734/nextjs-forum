@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {
   enumType,
   objectType,
@@ -56,12 +57,14 @@ export const User = objectType({
     });
     t.list.field("posts", {
       type: Post,
+
       async resolve({ id }, _args, { prisma }) {
         return await prisma.user.findUnique({ where: { id } }).posts();
       },
     });
     t.field("profile", {
       type: Profile,
+
       async resolve({ id }, _args, { prisma }) {
         return await prisma.user.findUnique({ where: { id } }).profile();
       },
@@ -88,12 +91,13 @@ export const Post = objectType({
     t.int("likesCount");
     t.boolean("isLiked");
 
-    t.nullable.field("author", {
+    t.field("author", {
       type: "User",
-      async resolve({ id }, _args, { prisma }) {
+
+      async resolve(_parent, _args, { prisma }) {
         return await prisma.post
           .findUnique({
-            where: { id },
+            where: { id: _parent.id || undefined },
           })
           .author();
       },
@@ -119,6 +123,7 @@ export const Profile = objectType({
     t.string("background");
     t.field("user", {
       type: User,
+
       async resolve({ id }, _args, { prisma }) {
         return prisma.profile.findUnique({ where: { id } }).user();
       },
@@ -169,6 +174,7 @@ export const Forum = objectType({
     });
     t.field("category", {
       type: ForumCategory,
+
       resolve({ id }, _args, { prisma }) {
         return prisma.profile.findUnique({ where: { id } }).user();
       },
@@ -184,6 +190,7 @@ export const ForumCategory = objectType({
     t.string("icon");
     t.list.field("forum", {
       type: Forum,
+
       async resolve({ id }, _args, { prisma }) {
         return prisma.forumCategory.findUnique({ where: { id } }).forum();
       },
@@ -201,6 +208,7 @@ export const Query = objectType({
       args: {
         email: nonNull(stringArg()),
       },
+
       resolve: (_, { email }, { prisma }) => {
         return prisma.user.findUnique({
           where: { email },
@@ -210,6 +218,7 @@ export const Query = objectType({
     /* 查找所有用户 */
     t.nonNull.list.field("users", {
       type: "User",
+
       async resolve(_, __, { prisma }) {
         return prisma.user.findMany();
       },
@@ -217,6 +226,7 @@ export const Query = objectType({
     /* 查找所有文章 */
     t.nonNull.list.field("posts", {
       type: "Post",
+
       async resolve(_, __, { prisma }) {
         return prisma.post.findMany({
           include: {
@@ -232,6 +242,7 @@ export const Query = objectType({
         take: intArg(),
         time: intArg(),
       },
+
       async resolve(_, { take = 10, time = 7 }, { prisma }) {
         const now = new Date();
         return prisma.post.findMany({
@@ -257,6 +268,7 @@ export const Query = objectType({
       args: {
         id: nonNull(intArg()),
       },
+
       async resolve(_, { id }, { prisma }) {
         return prisma.post.findUnique({
           where: { id },
@@ -269,6 +281,7 @@ export const Query = objectType({
     /* 查找所有标签 */
     t.nonNull.list.field("tags", {
       type: "Tag",
+
       async resolve(_, __, { prisma }) {
         return prisma.tag.findMany({
           include: {
@@ -281,6 +294,7 @@ export const Query = objectType({
     /* 查找所有大图*/
     t.list.field("banners", {
       type: "Banner",
+
       async resolve(_, __, { prisma }) {
         return prisma.banner.findMany();
       },
@@ -288,6 +302,7 @@ export const Query = objectType({
     /* 查找所有论坛 */
     t.list.field("forums", {
       type: "Forum",
+
       async resolve(_, __, { prisma }) {
         return prisma.forum.findMany();
       },
@@ -295,6 +310,7 @@ export const Query = objectType({
     /* 查找所有论坛分类 */
     t.list.field("forumCategories", {
       type: "ForumCategory",
+
       resolve(_, __, { prisma }) {
         return prisma.forumCategory.findMany();
       },
@@ -305,6 +321,7 @@ export const Query = objectType({
       args: {
         id: nonNull(intArg()),
       },
+
       async resolve(_, { id }, { prisma }) {
         return prisma.forum.findUnique({ where: { id } });
       },
@@ -321,6 +338,7 @@ export const Mutation = objectType({
       args: {
         password: nonNull(stringArg()),
       },
+
       resolve(_parent, { password }, { prisma, session }) {
         // console.log(session);
         if (!session) throw new Error(`您需要登录后才能执行操作`);
@@ -328,7 +346,7 @@ export const Mutation = objectType({
         password = crypto.createHash("md5").update(password).digest("hex");
 
         return prisma.user.update({
-          where: { email: session.user.email },
+          where: { email: session.user["email"] },
           data: { password },
         });
       },
@@ -342,8 +360,10 @@ export const Mutation = objectType({
         content: stringArg(),
         forum: stringArg(),
       },
+
       resolve(_, { forum, ...other }, { prisma, session }) {
         if (!session) throw new Error(`您需要登录后才能执行操作`);
+
         return prisma.post.create({
           data: {
             ...other,

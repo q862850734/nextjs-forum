@@ -1,6 +1,6 @@
-import { Box, Typography } from "@mui/material";
+import React from "react";
+import { Box, Typography, SxProps } from "@mui/material";
 import HeadTitle from "./HeadTitle";
-
 const BaseWrap = ({ children, title = "", sx = {} }) => {
   return (
     <>

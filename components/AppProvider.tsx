@@ -1,4 +1,4 @@
-import { useState, useMemo, createContext } from "react";
+import React, { useState, useMemo, createContext } from "react";
 import {
   ThemeProvider,
   createTheme,
@@ -87,12 +87,15 @@ const getDesignTokens = (mode: number) => ({
     ...Themes[mode],
   },
 });
-export const AppProvider = ({ children }) => {
-  const [mode, setMode] = useState(2);
+interface Props {
+  children: React.ReactNode;
+}
+export const AppProvider = ({ children }: Props) => {
+  const [mode, setMode] = useState<number>(2);
 
   const colorMode = useMemo(
     () => ({
-      toggleColorMode: (mode) => {
+      toggleColorMode: (mode: number) => {
         setMode(mode);
       },
     }),
