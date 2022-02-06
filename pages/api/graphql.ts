@@ -4,8 +4,9 @@ import { createContext } from "../../schema/context";
 import Cors from "micro-cors";
 
 const cors = Cors();
-//@ts-ignore
+
 const apolloServer = new ApolloServer({
+  //@ts-ignore
   schema,
   context: createContext,
 });
