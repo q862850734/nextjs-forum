@@ -44,8 +44,6 @@ type Props = NexusGenObjects["User"] & {
   profile?: NexusGenObjects["Profile"];
 };
 const Index = ({ name, image, posts, profile }: Props) => {
-  console.log(posts);
-
   return (
     <BaseWrap title={name + " - " + "的主页"}>
       <BaseCard>
@@ -80,7 +78,7 @@ export async function getServerSideProps(context: NextPageContext) {
   } = await apolloClient.query({
     query: USER_QUERY,
     variables: {
-      email: session.user.email,
+      email: session.user["email"],
     },
   });
 
