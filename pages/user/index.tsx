@@ -1,47 +1,93 @@
-import type { NextPage } from "next";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
+import type { NextPageContext } from "next";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import { initializeApollo } from "../../lib/apollo";
 import { useForm } from "react-hook-form";
-import Layout from "../../components/Layout";
 
-const ALL_USER_QUERY = gql`
-  query Query {
-    allUsers {
+import { Box, Typography, Avatar } from "@mui/material";
+import { Component } from "react";
+import BaseHead from "components/BaseHead";
+import BaseCard from "components/BaseCard";
+import BaseWrap from "components/BaseWrap";
+import Image from "next/image";
+import { User } from "graphql/type-defs";
+import { NexusGenObjects } from "../../@types/nexus-typegen";
+import PostCard from "components/PostCard";
+
+const USER_QUERY = gql`
+  query Query($email: String!) {
+    userByEmail(email: $email) {
       name
       email
+      image
+      isBlocked
+      createdAt
+      posts {
+        id
+        title
+        description
+        updatedAt
+        thumbnail
+        viewCount
+        likesCount
+        isLiked
+      }
+      profile {
+        bio
+        banner
+        background
+      }
     }
   }
 `;
+type Props = NexusGenObjects["User"] & {
+  posts?: [NexusGenObjects["Post"]];
+  profile?: NexusGenObjects["Profile"];
+};
+const Index = ({ name, image, posts, profile }: Props) => {
+  console.log(posts);
 
-export async function getStaticProps() {
+  return (
+    <BaseWrap title={name + " - " + "的主页"}>
+      <BaseCard>
+        <BaseHead
+          title={name}
+          icon={image}
+          description={profile ? profile.bio : "这个人什么都没写..."}
+        ></BaseHead>
+      </BaseCard>
+      <BaseCard sx={{ flex: "1", overflow: "auto" }}>
+        {posts && posts.map((x) => <PostCard key={x.id} {...x} />)}
+      </BaseCard>
+    </BaseWrap>
+  );
+};
+export default Index;
+
+export async function getServerSideProps(context: NextPageContext) {
+  const session = await getSession(context);
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/api/auth/signin",
+        permanent: false,
+      },
+    };
+  }
   const apolloClient = initializeApollo();
 
-  await apolloClient.query({
-    query: ALL_USER_QUERY,
+  const {
+    data: { userByEmail },
+  } = await apolloClient.query({
+    query: USER_QUERY,
+    variables: {
+      email: session.user.email,
+    },
   });
-
-  console.log(apolloClient.cache.extract());
 
   return {
     props: {
-      initialApolloState: apolloClient.cache.extract(),
+      ...userByEmail,
     },
-    revalidate: 1,
   };
-}
-
-export default function index() {
-  const {
-    data: { allUsers },
-    loading,
-    error,
-  } = useQuery(ALL_USER_QUERY);
-  console.log(allUsers);
-
-  return (
-    <Layout>
-      <h1>111</h1>
-    </Layout>
-  );
 }

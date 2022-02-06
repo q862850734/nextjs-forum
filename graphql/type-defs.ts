@@ -114,9 +114,7 @@ export const Profile = objectType({
   definition(t) {
     t.int("id");
     t.string("userId");
-    t.string("name");
     t.string("bio");
-    t.string("avatar");
     t.string("banner");
     t.string("background");
     t.field("user", {

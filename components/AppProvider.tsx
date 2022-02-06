@@ -87,7 +87,7 @@ const getDesignTokens = (mode: number) => ({
     ...Themes[mode],
   },
 });
-export default function ToggleColorMode({ children }) {
+export const AppProvider = ({ children }) => {
   const [mode, setMode] = useState(2);
 
   const colorMode = useMemo(
@@ -106,4 +106,4 @@ export default function ToggleColorMode({ children }) {
       <ThemeProvider theme={theme}>{children}</ThemeProvider>
     </ColorModeContext.Provider>
   );
-}
+};

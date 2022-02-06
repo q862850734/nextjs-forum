@@ -1,7 +1,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import Layout from "../components/Layout";
+import Layout from "components/Layout";
 
 export default function Types() {
   return (

@@ -12,7 +12,7 @@ interface Props {
   delay?: number;
 }
 
-export default memo(function SwipeBanner({ banners, delay = 3500 }: Props) {
+const SwipeBanner = memo(function Swipe({ banners, delay = 3500 }: Props) {
   return (
     <Swiper
       style={{ width: "100%", height: "100%" }}
@@ -38,3 +38,5 @@ export default memo(function SwipeBanner({ banners, delay = 3500 }: Props) {
     </Swiper>
   );
 });
+
+export default SwipeBanner;

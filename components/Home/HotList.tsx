@@ -6,7 +6,7 @@ import { Post } from "@prisma/client";
 interface Props {
   data: Post[];
 }
-export default memo(function HotList({ data }: Props) {
+export const HotList = memo(function HotList({ data }: Props) {
   return (
     <Box
       sx={{
@@ -28,7 +28,7 @@ export default memo(function HotList({ data }: Props) {
       {data.map((x, i) => (
         <Box key={x.id} component="aside">
           <LocalFireDepartmentIcon />
-          <RouteLink href="/test" title={i + 1 + ". " + x.title} />
+          <RouteLink href={"/posts/" + x.id} title={i + 1 + ". " + x.title} />
         </Box>
       ))}
     </Box>

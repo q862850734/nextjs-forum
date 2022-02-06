@@ -4,7 +4,6 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 import RouteLink from "../../RouteLink";
 import {
-  Button,
   Box,
   IconButton,
   Avatar as UserAvatar,
@@ -65,7 +64,7 @@ export default function Avatar() {
           "aria-labelledby": "basic-button",
         }}
       >
-        <Item href="/" title="个人主页">
+        <Item href="/user" title="个人主页">
           <AccountCircleIcon />
         </Item>
         <Item href="/create" title="发帖">

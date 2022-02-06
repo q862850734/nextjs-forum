@@ -2,7 +2,6 @@ import type { NextPage } from "next";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import { useForm } from "react-hook-form";
-import Layout from "../components/Layout";
 import Image from "next/image";
 import { Avatar, Box } from "@mui/material";
 

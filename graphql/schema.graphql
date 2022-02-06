@@ -72,12 +72,10 @@ type Post {
 }
 
 type Profile {
-  avatar: String
   background: String
   banner: String
   bio: String
   id: Int
-  name: String
   user: User
   userId: String
 }

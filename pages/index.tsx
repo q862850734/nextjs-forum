@@ -4,10 +4,9 @@ import { BoxProps } from "@mui/material/Box";
 
 import { gql } from "@apollo/client";
 import { initializeApollo } from "../lib/apollo";
-import HeadTitle from "../components/HeadTitle";
-import SwipeBanner from "../components/SwipeBanner";
-import ForumCategory from "../components/Home/ForumCategory";
-import HotList from "../components/Home/HotList";
+import HeadTitle from "components/HeadTitle";
+import SwipeBanner from "components/SwipeBanner";
+import { ForumCategory, HotList } from "components/Home";
 
 const Item = memo(function item(props: BoxProps) {
   const { sx, ...other } = props;

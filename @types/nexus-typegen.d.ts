@@ -95,12 +95,10 @@ export interface NexusGenObjects {
     viewCount?: number | null; // Int
   }
   Profile: { // root type
-    avatar?: string | null; // String
     background?: string | null; // String
     banner?: string | null; // String
     bio?: string | null; // String
     id?: number | null; // Int
-    name?: string | null; // String
     userId?: string | null; // String
   }
   Query: {};
@@ -193,12 +191,10 @@ export interface NexusGenFieldTypes {
     viewCount: number | null; // Int
   }
   Profile: { // field return type
-    avatar: string | null; // String
     background: string | null; // String
     banner: string | null; // String
     bio: string | null; // String
     id: number | null; // Int
-    name: string | null; // String
     user: NexusGenRootTypes['User'] | null; // User
     userId: string | null; // String
   }
@@ -297,12 +293,10 @@ export interface NexusGenFieldTypeNames {
     viewCount: 'Int'
   }
   Profile: { // field return type name
-    avatar: 'String'
     background: 'String'
     banner: 'String'
     bio: 'String'
     id: 'Int'
-    name: 'String'
     user: 'User'
     userId: 'String'
   }

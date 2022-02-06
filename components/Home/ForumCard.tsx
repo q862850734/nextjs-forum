@@ -1,12 +1,4 @@
-import {
-  Box,
-  Grid,
-  Card,
-  CardContent,
-  Typography,
-  BoxProps,
-  GridProps,
-} from "@mui/material";
+import { Box, Grid, Typography, GridProps } from "@mui/material";
 import RouteLink from "../RouteLink";
 import { NexusGenObjects } from "../../@types/nexus-typegen";
 
@@ -15,10 +7,10 @@ interface Props {
   option?: GridProps;
 }
 
-export default function MediaControlCard({
+const ForumCard = ({
   data: { id, title, description },
   option = {},
-}: Props) {
+}: Props) => {
   return (
     <Grid item {...option} sx={{ display: "flex", flexDirection: "column" }}>
       <Box sx={{ p: 2 }}>
@@ -34,4 +26,6 @@ export default function MediaControlCard({
       </Box>
     </Grid>
   );
-}
+};
+
+export default ForumCard;

@@ -1,5 +1,5 @@
 import Head from "next/head";
-export default function HeadTitle({ title = "Next-Forum" }) {
+const HeadTitle = ({ title = "Next-Forum" }) => {
   return (
     <Head>
       <title>{title}</title>
@@ -10,4 +10,5 @@ export default function HeadTitle({ title = "Next-Forum" }) {
       <link rel="icon" href="/favicon.ico" />
     </Head>
   );
-}
+};
+export default HeadTitle;

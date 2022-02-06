@@ -1,11 +1,12 @@
-import { Box, Grid, Icon, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import { NexusGenFieldTypes } from "../../@types/nexus-typegen";
 import ForumCard from "./ForumCard";
-export default function ForumCategory({
+
+export const ForumCategory = ({
   name,
   forum,
   icon,
-}: NexusGenFieldTypes["ForumCategory"]) {
+}: NexusGenFieldTypes["ForumCategory"]) => {
   return (
     <Box
       component="section"
@@ -33,4 +34,4 @@ export default function ForumCategory({
       </Grid>
     </Box>
   );
-}
+};

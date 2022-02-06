@@ -23,7 +23,7 @@ const MenuProps = {
     },
   },
 };
-export default function TagsInput({ tags: tagList }) {
+const TagsInput = ({ tags: tagList }) => {
   return (
     <Autocomplete
       multiple
@@ -49,4 +49,6 @@ export default function TagsInput({ tags: tagList }) {
       )}
     />
   );
-}
+};
+
+export default TagsInput;

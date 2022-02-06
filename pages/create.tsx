@@ -8,18 +8,19 @@ import {
   Chip,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import Layout from "../components/Layout";
 import { useSession, getSession } from "next-auth/react";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import { initializeApollo } from "../lib/apollo";
-import { Forum, Tag } from "@prisma/client";
-import TagsInput from "../components/TagsInput";
+
 import dynamic from "next/dynamic";
 import { useForm, Controller } from "react-hook-form";
+import { Forum, Tag } from "@prisma/client";
 
-const Editor = dynamic(() => import("../components/Editor"), {
+import TagsInput from "components/TagsInput";
+import Layout from "components/Layout";
+
+const Editor = dynamic(() => import("components/Editor"), {
   ssr: false,
-  loading: () => <p>loading...</p>,
 });
 
 const CREATE_POST = gql`
