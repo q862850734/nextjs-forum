@@ -16,12 +16,11 @@ let apolloClient;
  * 创建 apollo 客户端新实例
  * @returns
  */
-
 function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
     link: new HttpLink({
-      uri: "http://localhost:3000/api/graphql",
+      uri: "https://nextjs-forum.vercel.app/api/graphql",
       credentials: "same-origin",
     }),
     cache: new InMemoryCache({
