@@ -16,7 +16,7 @@ function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === "undefined", // 判断是否在服务端运行
     link: new HttpLink({
-      uri: "//api/graphql",
+      uri: "https://nextjs-forum-82y1ecnan-vhanlee.vercel.app/api/graphql",
       credentials: "same-origin",
     }),
     cache: new InMemoryCache({
