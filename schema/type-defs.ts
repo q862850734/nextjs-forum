@@ -192,8 +192,8 @@ export const ForumCategory = objectType({
 });
 
 /* 查询定义 */
-export const Query = extendType({
-  type: "Query",
+export const Query = objectType({
+  name: "Query",
   definition(t) {
     /* 通过邮箱查找用户 */
     t.field("userByEmail", {
@@ -210,14 +210,14 @@ export const Query = extendType({
     /* 查找所有用户 */
     t.nonNull.list.field("users", {
       type: "User",
-      resolve(_, __, { prisma }) {
+      async resolve(_, __, { prisma }) {
         return prisma.user.findMany();
       },
     });
     /* 查找所有文章 */
     t.nonNull.list.field("posts", {
       type: "Post",
-      resolve(_, __, { prisma }) {
+      async resolve(_, __, { prisma }) {
         return prisma.post.findMany({
           include: {
             tags: true,
@@ -232,7 +232,7 @@ export const Query = extendType({
         take: intArg(),
         time: intArg(),
       },
-      resolve(_, { take = 10, time = 7 }, { prisma }) {
+      async resolve(_, { take = 10, time = 7 }, { prisma }) {
         const now = new Date();
         return prisma.post.findMany({
           take,
@@ -257,7 +257,7 @@ export const Query = extendType({
       args: {
         id: nonNull(intArg()),
       },
-      resolve(_, { id }, { prisma }) {
+      async resolve(_, { id }, { prisma }) {
         return prisma.post.findUnique({
           where: { id },
           include: {
@@ -269,7 +269,7 @@ export const Query = extendType({
     /* 查找所有标签 */
     t.nonNull.list.field("tags", {
       type: "Tag",
-      resolve(_, __, { prisma }) {
+      async resolve(_, __, { prisma }) {
         return prisma.tag.findMany({
           include: {
             posts: true,
@@ -281,14 +281,14 @@ export const Query = extendType({
     /* 查找所有大图*/
     t.list.field("banners", {
       type: "Banner",
-      resolve(_, __, { prisma }) {
+      async resolve(_, __, { prisma }) {
         return prisma.banner.findMany();
       },
     });
     /* 查找所有论坛 */
     t.list.field("forums", {
       type: "Forum",
-      resolve(_, __, { prisma }) {
+      async resolve(_, __, { prisma }) {
         return prisma.forum.findMany();
       },
     });
@@ -305,7 +305,7 @@ export const Query = extendType({
       args: {
         id: nonNull(intArg()),
       },
-      resolve(_, { id }, { prisma }) {
+      async resolve(_, { id }, { prisma }) {
         return prisma.forum.findUnique({ where: { id } });
       },
     });
@@ -313,8 +313,8 @@ export const Query = extendType({
 });
 
 /* 突变定义 */
-export const Mutation = extendType({
-  type: "Mutation",
+export const Mutation = objectType({
+  name: "Mutation",
   definition(t) {
     t.field("userSetPassword", {
       type: "User",

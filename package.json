@@ -6,9 +6,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build:nexus-typegen": "ts-node --compiler-options  \"{\\\"module\\\":\\\"commonjs\\\"}\" --transpile-only graphql/schema.ts",
+    "build": "npm run build:nexus-typegen && next build"
+
   },
   "dependencies": {
     "@apollo/client": "^3.5.8",
