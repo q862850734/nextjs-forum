@@ -7,8 +7,7 @@ import {
   TextField,
   Chip,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import { useSession, getSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import { initializeApollo } from "../lib/apollo";
 

@@ -69,7 +69,7 @@ export default function Forum({ forumById: forum }) {
 
         <BaseCard sx={{ flex: 1 }}>
           {forum.posts.map((x) => (
-            <RouteLink key={x.id} href={`/posts/${x.id}`} title={x.title} />
+            <PostCard key={x.id} {...x} />
           ))}
         </BaseCard>
       </Box>

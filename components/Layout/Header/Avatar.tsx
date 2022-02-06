@@ -17,6 +17,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 import NoteAddIcon from "@mui/icons-material/NoteAdd";
+import SettingsIcon from "@mui/icons-material/Settings";
 import EditIcon from "@mui/icons-material/Edit";
 import Image from "next/image";
 
@@ -64,11 +65,15 @@ export default function Avatar() {
           "aria-labelledby": "basic-button",
         }}
       >
+        <Item href="/create" title="发帖">
+          <EditIcon />
+        </Item>
         <Item href="/user" title="个人主页">
           <AccountCircleIcon />
         </Item>
-        <Item href="/create" title="发帖">
-          <EditIcon />
+
+        <Item href="/profile" title="设置">
+          <SettingsIcon />
         </Item>
         <Divider />
         <Item
