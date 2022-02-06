@@ -8,7 +8,7 @@
     "dev": "next dev",
     "start": "next start",
     "lint": "next lint",
-    "build:nexus-typegen": "ts-node --compiler-options  \"{\\\"module\\\":\\\"commonjs\\\"}\" --transpile-only graphql/schema.ts",
+    "build:nexus-typegen": "ts-node --compiler-options  \"{\\\"module\\\":\\\"commonjs\\\"}\" --transpile-only schema",
     "build": "npm run build:nexus-typegen && next build"
 
   },
