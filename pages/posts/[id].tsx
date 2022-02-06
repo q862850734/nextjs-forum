@@ -10,7 +10,7 @@ const ALL_POSTS_PATH = gql`
   }
 `;
 
-export async function getStaticPaths(context) {
+export async function getStaticPaths(t) {
   const apolloClient = initializeApollo();
 
   const {
@@ -24,7 +24,7 @@ export async function getStaticPaths(context) {
   }));
   return {
     paths,
-    fallback: true, // false or 'blocking'
+    fallback: false, // false or 'blocking'
   };
 }
 const POST_BY_ID = gql`
