@@ -16,7 +16,7 @@ function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === "undefined", // 判断是否在服务端运行
     link: new HttpLink({
-      uri: process.env.NEXTAUTH_URL + "/api/graphql",
+      uri: "//api/graphql",
       credentials: "same-origin",
     }),
     cache: new InMemoryCache({
