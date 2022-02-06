@@ -162,7 +162,7 @@ async function main() {
             },
           },
           posts: {
-            "create|1-5": [
+            "create|5-10": [
               {
                 title: "@ctitle(3, 5)",
                 description: "@csentence()",
@@ -178,12 +178,12 @@ async function main() {
                 tags: {
                   connectOrCreate: [
                     {
-                      where: { name: "Introductions" },
-                      create: { name: "Introductions" },
+                      where: { name: "Test" },
+                      create: { name: "Test" },
                     },
                     {
-                      where: { name: "Social" },
-                      create: { name: "Social" },
+                      where: { name: "Dev" },
+                      create: { name: "Dev" },
                     },
                   ],
                 },

@@ -17,7 +17,6 @@ import { useForm, Controller } from "react-hook-form";
 import { Forum, Tag } from "@prisma/client";
 
 import TagsInput from "components/TagsInput";
-import Layout from "components/Layout";
 
 const Editor = dynamic(() => import("components/Editor"), {
   ssr: false,

@@ -16,14 +16,14 @@ function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === "undefined", // 判断是否在服务端运行
     link: new HttpLink({
-      uri: "http://localhost:3000/api/graphql",
+      uri: process.env.NEXTAUTH_URL + "/api/graphql",
       credentials: "same-origin",
     }),
     cache: new InMemoryCache({
       typePolicies: {
         Query: {
           fields: {
-            allPosts: concatPagination(),
+            posts: concatPagination(),
           },
         },
       },
