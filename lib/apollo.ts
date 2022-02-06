@@ -21,7 +21,7 @@ function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
     link: new HttpLink({
-      uri: "/api/graphql",
+      uri: "https://apollo-server-vercel.saeris.io/api/example",
       credentials: "same-origin",
     }),
     cache: new InMemoryCache({
