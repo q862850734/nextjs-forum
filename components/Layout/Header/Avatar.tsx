@@ -1,6 +1,6 @@
 import { useState, MouseEvent } from "react";
 
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signIn, signOut, getSession } from "next-auth/react";
 
 import RouteLink from "../../RouteLink";
 import {
@@ -31,8 +31,19 @@ function Item({ href, title, children }) {
     </MenuItem>
   );
 }
-
-export default function Avatar() {
+export async function getServerSideProps(ctx) {
+  const session = await getSession(ctx);
+  if (!session) {
+    return {
+      props: {},
+    };
+  }
+  const { user } = session;
+  return {
+    props: { user },
+  };
+}
+export default function Avatar({ session }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -41,7 +52,6 @@ export default function Avatar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const { data: session, status } = useSession();
 
   return (
     <Box>
