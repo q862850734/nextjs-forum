@@ -5,7 +5,7 @@ import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Header from "./Header";
 
-const Layout = ({ children, title = "Next Forum" }) => {
+const Layout = ({ children }) => {
   return (
     <React.Fragment>
       <CssBaseline />
