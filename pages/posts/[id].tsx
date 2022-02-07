@@ -1,7 +1,8 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Chip } from "@mui/material";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import { initializeApollo } from "../../lib/apollo";
-
+import RouteLink from "components/RouteLink";
+import BasicBreadcrumbs from "components/BasicBreadcrumbs";
 const ALL_POSTS_PATH = gql`
   query Query {
     posts {
@@ -43,6 +44,13 @@ const POST_BY_ID = gql`
       viewCount
       likesCount
       isLiked
+      forum {
+        title
+        id
+        category {
+          name
+        }
+      }
       author {
         name
         id
@@ -67,6 +75,7 @@ export async function getStaticProps({ params: { id } }) {
       postByIdId: Number(id),
     },
   });
+  console.log(postById);
 
   return {
     props: { data: { ...postById } }, // will be passed to the page component as props
@@ -84,9 +93,26 @@ export default function Posts({ data }) {
         minHeight: 1,
       }}
     >
+      <BasicBreadcrumbs
+        {...{
+          links: [
+            {
+              href: "/",
+              title: data.forum.category.name,
+            },
+          ],
+          title: data.forum.title,
+        }}
+      />
       <Typography align="center" variant="h4" component="h2">
         {data.title}
       </Typography>
+      {data.tags &&
+        data.tags.map((x) => (
+          <RouteLink key={x.id} href={"/tag/" + x.name} title={x.name}>
+            <Chip label={x.name} />
+          </RouteLink>
+        ))}
       <Box
         sx={{
           p: 3,

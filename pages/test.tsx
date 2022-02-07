@@ -44,13 +44,7 @@ export default function Test() {
       {session?.user && (
         <div>
           <h2>{session.user["email"]}</h2>
-          <Avatar>
-            <Image
-              layout="fill"
-              src={session.user["image"]}
-              alt={session.user["name"]}
-            />
-          </Avatar>
+          <Avatar src={session.user["image"]} />
         </div>
       )}
 

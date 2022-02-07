@@ -189,6 +189,7 @@ export interface NexusGenFieldTypes {
     content: string | null; // String
     createdAt: NexusGenScalars['DateTime'] | null; // DateTime
     description: string | null; // String
+    forum: NexusGenRootTypes['Forum'] | null; // Forum
     id: number | null; // Int
     isLiked: boolean | null; // Boolean
     isLocked: boolean | null; // Boolean
@@ -216,6 +217,7 @@ export interface NexusGenFieldTypes {
     hotPosts: Array<NexusGenRootTypes['Post'] | null>; // [Post]!
     postById: NexusGenRootTypes['Post'] | null; // Post
     posts: Array<NexusGenRootTypes['Post'] | null>; // [Post]!
+    tagPosts: NexusGenRootTypes['Tag']; // Tag!
     tags: Array<NexusGenRootTypes['Tag'] | null>; // [Tag]!
     userByEmail: NexusGenRootTypes['User'] | null; // User
     users: Array<NexusGenRootTypes['User'] | null>; // [User]!
@@ -291,6 +293,7 @@ export interface NexusGenFieldTypeNames {
     content: 'String'
     createdAt: 'DateTime'
     description: 'String'
+    forum: 'Forum'
     id: 'Int'
     isLiked: 'Boolean'
     isLocked: 'Boolean'
@@ -318,6 +321,7 @@ export interface NexusGenFieldTypeNames {
     hotPosts: 'Post'
     postById: 'Post'
     posts: 'Post'
+    tagPosts: 'Tag'
     tags: 'Tag'
     userByEmail: 'User'
     users: 'User'
@@ -351,6 +355,7 @@ export interface NexusGenArgTypes {
       content?: string | null; // String
       description?: string | null; // String
       forum?: string | null; // String
+      tags?: Array<string | null> | null; // [String]
       title?: string | null; // String
     }
     userSetPassword: { // args
@@ -367,6 +372,9 @@ export interface NexusGenArgTypes {
     }
     postById: { // args
       id: number; // Int!
+    }
+    tagPosts: { // args
+      name: string; // String!
     }
     userByEmail: { // args
       email: string; // String!

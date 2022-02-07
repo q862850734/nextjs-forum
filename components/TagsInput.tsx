@@ -23,28 +23,38 @@ const MenuProps = {
     },
   },
 };
-const TagsInput = ({ tags: tagList }) => {
+const TagsInput = ({ control, tags: tagList }) => {
   return (
-    <Autocomplete
-      multiple
-      options={tagList.map((option) => option.name)}
-      defaultValue={[tagList[0].name]}
-      renderTags={(value: readonly string[], getTagProps) =>
-        value.map((option: string, index: number) => (
-          <Chip
-            key={index}
-            variant="outlined"
-            label={option}
-            {...getTagProps({ index })}
-          />
-        ))
-      }
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          variant="filled"
-          label="freeSolo"
-          placeholder="Favorites"
+    <Controller
+      name="tags"
+      control={control}
+      defaultValue={[]}
+      render={({ field: { onChange, ...props } }) => (
+        <Autocomplete
+          multiple
+          onChange={(e, value) => onChange(value)}
+          options={tagList.map((option) => option.name)}
+          defaultValue={[tagList[0].name]}
+          freeSolo
+          renderTags={(value: readonly string[], getTagProps) =>
+            value.map((option: string, index: number) => (
+              <Chip
+                key={index}
+                variant="outlined"
+                label={option}
+                {...getTagProps({ index })}
+              />
+            ))
+          }
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              variant="filled"
+              label="freeSolo"
+              placeholder="Favorites"
+            />
+          )}
+          {...props}
         />
       )}
     />

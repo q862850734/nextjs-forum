@@ -4,7 +4,6 @@ import {
   objectType,
   asNexusMethod,
   nonNull,
-  extendType,
   stringArg,
   intArg,
   inputObjectType,
@@ -109,6 +108,12 @@ export const Post = objectType({
         return await prisma.post.findUnique({ where: { id } }).tags();
       },
     });
+    t.field("forum", {
+      type: Forum,
+      async resolve({ id }, _args, { prisma }) {
+        return await prisma.post.findUnique({ where: { id } }).forum();
+      },
+    });
   },
 });
 
@@ -130,6 +135,7 @@ export const Profile = objectType({
     });
   },
 });
+
 /* 标签 */
 export const Tag = objectType({
   name: "Tag",
@@ -175,8 +181,8 @@ export const Forum = objectType({
     t.field("category", {
       type: ForumCategory,
 
-      resolve({ id }, _args, { prisma }) {
-        return prisma.profile.findUnique({ where: { id } }).user();
+      async resolve({ id }, _args, { prisma }) {
+        return prisma.forum.findUnique({ where: { id } }).category();
       },
     });
   },
@@ -209,7 +215,7 @@ export const Query = objectType({
         email: nonNull(stringArg()),
       },
 
-      resolve: (_, { email }, { prisma }) => {
+      async resolve(_, { email }, { prisma }) {
         return prisma.user.findUnique({
           where: { email },
         });
@@ -281,9 +287,22 @@ export const Query = objectType({
     /* 查找所有标签 */
     t.nonNull.list.field("tags", {
       type: "Tag",
-
       async resolve(_, __, { prisma }) {
         return prisma.tag.findMany({
+          include: {
+            posts: true,
+          },
+        });
+      },
+    });
+    t.nonNull.field("tagPosts", {
+      type: "Tag",
+      args: {
+        name: nonNull(stringArg()),
+      },
+      async resolve(_, { name }, { prisma }) {
+        return prisma.tag.findUnique({
+          where: { name },
           include: {
             posts: true,
           },
@@ -339,13 +358,13 @@ export const Mutation = objectType({
         password: nonNull(stringArg()),
       },
 
-      resolve(_parent, { password }, { prisma, session }) {
+      async resolve(_parent, { password }, { prisma, session }) {
         // console.log(session);
         if (!session) throw new Error(`您需要登录后才能执行操作`);
 
         password = crypto.createHash("md5").update(password).digest("hex");
 
-        return prisma.user.update({
+        return await prisma.user.update({
           where: { email: session.user["email"] },
           data: { password },
         });
@@ -359,14 +378,23 @@ export const Mutation = objectType({
         description: stringArg(),
         content: stringArg(),
         forum: stringArg(),
+        tags: list(stringArg()),
       },
 
-      resolve(_, { forum, ...other }, { prisma, session }) {
+      async resolve(_, { forum, tags, ...other }, { prisma, session }) {
         if (!session) throw new Error(`您需要登录后才能执行操作`);
 
-        return prisma.post.create({
+        if (tags.length > 0)
+          tags = tags.map((x) => ({ where: { name: x }, create: { name: x } }));
+
+        console.log(tags);
+
+        return await prisma.post.create({
           data: {
             ...other,
+            tags: {
+              connectOrCreate: [...tags],
+            },
             forum: {
               connect: {
                 title: forum,

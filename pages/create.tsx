@@ -10,35 +10,31 @@ import {
 import { getToken } from "next-auth/jwt";
 import { getSession } from "next-auth/react";
 import { gql, useQuery, useMutation } from "@apollo/client";
+import { throttle } from "lodash";
 import { initializeApollo } from "../lib/apollo";
 
 import dynamic from "next/dynamic";
 import { useForm, Controller } from "react-hook-form";
 import { Forum, Tag } from "@prisma/client";
-
+import { useRouter } from "next/router";
 import TagsInput from "components/TagsInput";
 import Loading from "components/Loading";
+import toast, { Toaster } from "react-hot-toast";
 
 const Editor = dynamic(() => import("components/Editor"), {
   ssr: false,
 });
 
-const CREATE_POST = gql`
-  mutation AddTodo($text: String!) {
-    addTodo(text: $text) {
-      id
-      text
-    }
-  }
-`;
-
 export default function Create({ session }) {
-  const [forumData, setData] = useState({});
-  useEffect(() => {
-    if (forumData["title"]) {
-      addPost();
-    }
-  }, [forumData]);
+  const [addPost, { data: d, loading: l, error }] = useMutation(
+    gql(`mutation Mutation($tags: [String]!, $title: String, $description: String, $content: String, $forum: String) {
+      addPost(tags: $tags, title: $title, description: $description, content: $content, forum: $forum) {
+        id
+      }
+    }`)
+  );
+  const router = useRouter();
+
   const {
     register,
     handleSubmit,
@@ -49,8 +45,22 @@ export default function Create({ session }) {
   } = useForm();
 
   const onSubmit = (data) => {
-    setData(data);
-    // addPost();
+    console.log(data);
+
+    addPost({ variables: { ...data } })
+      .then(
+        ({
+          data: {
+            addPost: { id },
+          },
+        }) => {
+          toast.success("提交成功");
+          router.push("/posts/" + id);
+        }
+      )
+      .catch((e) => {
+        toast.error(e);
+      });
   };
 
   const { loading, data } = useQuery(gql`
@@ -66,20 +76,6 @@ export default function Create({ session }) {
       }
     }
   `);
-
-  const [addPost, { data: d, loading: l, error }] = useMutation(
-    gql(`
-  mutation Mutation($title: String, $description: String, $content: String, $forum: String) {
-    addPost(title: $title, description: $description, content: $content, forum: $forum) {
-      title
-    }
-  }`),
-    {
-      variables: {
-        ...forumData,
-      },
-    }
-  );
 
   if (loading) return <Loading />;
   const { forums, tags } = data;
@@ -129,29 +125,7 @@ export default function Create({ session }) {
         id="outlined-desc"
         label="描述"
       />
-      <Autocomplete
-        multiple
-        options={tags.map((option) => option.name)}
-        defaultValue={[tags[0].name]}
-        renderTags={(value: readonly string[], getTagProps) =>
-          value.map((option: string, index: number) => (
-            <Chip
-              key={index}
-              variant="outlined"
-              label={option}
-              {...getTagProps({ index })}
-            />
-          ))
-        }
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            variant="standard"
-            label="标签"
-            placeholder="Favorites"
-          />
-        )}
-      />
+      <TagsInput control={control} tags={tags} />
 
       <Box
         sx={{

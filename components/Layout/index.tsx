@@ -15,7 +15,7 @@ const Layout = ({ children, title = "Next Forum" }) => {
           height: 1,
         }}
       >
-        <Header sx={{ height: "6vh" }} />
+        <Header sx={{ height: "6vh", bgcolor: "primary.main" }} />
         <Container
           maxWidth="lg"
           sx={{

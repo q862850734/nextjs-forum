@@ -21,7 +21,7 @@ export default function index({ sx = {} }) {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          bgcolor: "primary.main",
+
           color: "primary.contrastText",
         }}
       >
