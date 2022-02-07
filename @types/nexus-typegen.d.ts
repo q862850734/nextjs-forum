@@ -181,6 +181,7 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     addPost: NexusGenRootTypes['Post'] | null; // Post
+    thumb: NexusGenRootTypes['User'] | null; // User
     userSetPassword: NexusGenRootTypes['User'] | null; // User
   }
   Post: { // field return type
@@ -193,6 +194,7 @@ export interface NexusGenFieldTypes {
     id: number | null; // Int
     isLiked: boolean | null; // Boolean
     isLocked: boolean | null; // Boolean
+    like: Array<NexusGenRootTypes['User'] | null> | null; // [User]
     likesCount: number | null; // Int
     tags: Array<NexusGenRootTypes['Tag'] | null> | null; // [Tag]
     thumbnail: string | null; // String
@@ -241,6 +243,7 @@ export interface NexusGenFieldTypes {
     posts: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
     profile: NexusGenRootTypes['Profile'] | null; // Profile
     role: NexusGenEnums['Role'] | null; // Role
+    thumb_list: Array<NexusGenRootTypes['Post'] | null> | null; // [Post]
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
 }
@@ -285,6 +288,7 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     addPost: 'Post'
+    thumb: 'User'
     userSetPassword: 'User'
   }
   Post: { // field return type name
@@ -297,6 +301,7 @@ export interface NexusGenFieldTypeNames {
     id: 'Int'
     isLiked: 'Boolean'
     isLocked: 'Boolean'
+    like: 'User'
     likesCount: 'Int'
     tags: 'Tag'
     thumbnail: 'String'
@@ -345,6 +350,7 @@ export interface NexusGenFieldTypeNames {
     posts: 'Post'
     profile: 'Profile'
     role: 'Role'
+    thumb_list: 'Post'
     updatedAt: 'DateTime'
   }
 }
@@ -357,6 +363,10 @@ export interface NexusGenArgTypes {
       forum?: string | null; // String
       tags?: Array<string | null> | null; // [String]
       title?: string | null; // String
+    }
+    thumb: { // args
+      id: number; // Int!
+      type: boolean; // Boolean!
     }
     userSetPassword: { // args
       password: string; // String!

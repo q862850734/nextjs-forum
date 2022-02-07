@@ -15,10 +15,10 @@ export const PostCard = ({
   description,
   id,
   viewCount,
-  likesCount,
   isLiked,
+  like,
   author,
-}: Props) => {
+}: any) => {
   return (
     <Box
       sx={{
@@ -55,7 +55,7 @@ export const PostCard = ({
             </Typography>
           </RouteLink>
         </Box>
-        <PostOperateBar {...{ viewCount, isLiked, likesCount }} />
+        <PostOperateBar {...{ id, viewCount, isLiked, like }} />
       </Box>
       <Box sx={{ height: 150 }}>
         {thumbnail && <Image width={150} height={150} src={thumbnail}></Image>}

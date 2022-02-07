@@ -10,6 +10,7 @@ import { ForumHead } from "components/Forum";
 import RouteLink from "components/RouteLink";
 import HeadTitle from "components/HeadTitle";
 import PostCard from "components/PostCard";
+import { useSession } from "next-auth/react";
 
 const FORUM_BY_ID = gql`
   query ForumById($forumByIdId: Int!) {
@@ -29,6 +30,10 @@ const FORUM_BY_ID = gql`
         viewCount
         likesCount
         isLiked
+        like {
+          email
+          image
+        }
         author {
           name
         }

@@ -8,6 +8,7 @@ import {
   intArg,
   inputObjectType,
   list,
+  booleanArg,
 } from "nexus";
 import { DateTimeResolver } from "graphql-scalars";
 export const DateTime = asNexusMethod(DateTimeResolver, "date");
@@ -45,7 +46,12 @@ export const User = objectType({
     t.string("password");
     t.string("image");
     t.boolean("isBlocked");
-
+    t.list.field("thumb_list", {
+      type: "Post",
+      async resolve({ id }, _args, { prisma }) {
+        return await prisma.user.findUnique({ where: { id } }).thumblist;
+      },
+    });
     t.field("createdAt", { type: "DateTime" });
     t.field("updatedAt", { type: "DateTime" });
     t.list.field("accounts", {
@@ -63,7 +69,6 @@ export const User = objectType({
     });
     t.field("profile", {
       type: Profile,
-
       async resolve({ id }, _args, { prisma }) {
         return await prisma.user.findUnique({ where: { id } }).profile();
       },
@@ -89,7 +94,16 @@ export const Post = objectType({
     t.int("viewCount");
     t.int("likesCount");
     t.boolean("isLiked");
-
+    t.list.field("like", {
+      type: "User",
+      async resolve(_parent, _args, { prisma }) {
+        return await prisma.post
+          .findUnique({
+            where: { id: _parent.id || undefined },
+          })
+          .like();
+      },
+    });
     t.field("author", {
       type: "User",
 
@@ -274,7 +288,6 @@ export const Query = objectType({
       args: {
         id: nonNull(intArg()),
       },
-
       async resolve(_, { id }, { prisma }) {
         return prisma.post.findUnique({
           where: { id },
@@ -370,6 +383,28 @@ export const Mutation = objectType({
         });
       },
     });
+    /* 点赞 */
+    t.field("thumb", {
+      type: "User",
+      args: {
+        id: nonNull(intArg()),
+        type: nonNull(booleanArg()),
+      },
+      async resolve(_parent, { id, type }, { prisma, session }) {
+        // console.log(session);
+        if (!session) return;
+        return await prisma.user.update({
+          where: { email: session.user["email"] },
+          data: {
+            thumb_list: type
+              ? {
+                  connect: [{ id }],
+                }
+              : { disconnect: [{ id }] },
+          },
+        });
+      },
+    });
 
     t.field("addPost", {
       type: "Post",
@@ -387,7 +422,7 @@ export const Mutation = objectType({
         if (tags.length > 0)
           tags = tags.map((x) => ({ where: { name: x }, create: { name: x } }));
 
-        console.log(tags);
+        // console.log(tags);
 
         return await prisma.post.create({
           data: {

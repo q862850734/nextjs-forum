@@ -20,7 +20,7 @@ function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
     link: new HttpLink({
-      uri: "https://nextjs-forum.vercel.app/api/graphql",
+      uri: "https://nextjs-forum.vercel.app",
       credentials: "same-origin",
     }),
     cache: new InMemoryCache({

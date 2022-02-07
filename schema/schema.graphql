@@ -50,6 +50,7 @@ type ForumCategory {
 
 type Mutation {
   addPost(content: String, description: String, forum: String, tags: [String], title: String): Post
+  thumb(id: Int!, type: Boolean!): User
   userSetPassword(password: String!): User
 }
 
@@ -63,6 +64,7 @@ type Post {
   id: Int
   isLiked: Boolean
   isLocked: Boolean
+  like: [User]
   likesCount: Int
   tags: [Tag]
   thumbnail: String
@@ -120,5 +122,6 @@ type User {
   posts: [Post]
   profile: Profile
   role: Role
+  thumb_list: [Post]
   updatedAt: DateTime
 }

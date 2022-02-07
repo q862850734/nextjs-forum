@@ -5,7 +5,7 @@ import Cors from "micro-cors";
 
 const cors = Cors();
 //@ts-ignore
-const apolloServer = new ApolloServer({ schema, context: createContext });
+const apolloServer = new ApolloServer({ context: createContext, schema });
 const startServer = apolloServer.start();
 
 export default cors(async function handler(req, res) {
