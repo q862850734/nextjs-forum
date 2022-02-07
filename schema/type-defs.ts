@@ -279,6 +279,9 @@ export const Query = objectType({
         return prisma.post.findUnique({
           where: { id },
           include: {
+            forum: {
+              category: true,
+            },
             tags: true,
           },
         });
