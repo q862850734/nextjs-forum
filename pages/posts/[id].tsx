@@ -97,7 +97,7 @@ export default function Posts({ data }) {
         minHeight: 1,
       }}
     >
-      {data?.forum && data.forum.title && (
+      {/* {data?.forum && data.forum.title && (
         <BasicBreadcrumbs
           {...{
             links: [
@@ -109,7 +109,7 @@ export default function Posts({ data }) {
             title: data.forum.title,
           }}
         />
-      )}
+      )} */}
       <Typography align="center" variant="h4" component="h2">
         {data.title}
       </Typography>
