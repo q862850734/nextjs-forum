@@ -1,4 +1,4 @@
-import { Box, Typography, Chip } from "@mui/material";
+import { Box, Typography, Chip, Stack } from "@mui/material";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import { initializeApollo } from "../../lib/apollo";
 import RouteLink from "components/RouteLink";
@@ -97,7 +97,7 @@ export default function Posts({ data }) {
         minHeight: 1,
       }}
     >
-      {/* {data?.forum && data.forum.title && (
+      {data?.forum && data.forum.title && (
         <BasicBreadcrumbs
           {...{
             links: [
@@ -109,16 +109,21 @@ export default function Posts({ data }) {
             title: data.forum.title,
           }}
         />
-      )} */}
+      )}
       <Typography align="center" variant="h4" component="h2">
         {data.title}
       </Typography>
-      {data.tags &&
-        data.tags.map((x) => (
-          <RouteLink key={x.id} href={"/tag/" + x.name} title={x.name}>
-            <Chip label={x.name} />
-          </RouteLink>
-        ))}
+      <Box sx={{ width: 1, py: 1, display: "flex", justifyContent: "center" }}>
+        <Stack direction="row" spacing={2}>
+          {data?.tags &&
+            data.tags.length > 0 &&
+            data.tags.map((x) => (
+              <RouteLink key={x.id} href={"/tag/" + x.name} title={x.name}>
+                <Chip label={x.name} />
+              </RouteLink>
+            ))}
+        </Stack>
+      </Box>
       <Box
         sx={{
           p: 3,
