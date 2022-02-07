@@ -5,32 +5,6 @@ import RouteLink from "components/RouteLink";
 import BasicBreadcrumbs from "components/BasicBreadcrumbs";
 import Loading from "components/Loading";
 import { useRouter } from "next/router";
-const ALL_POSTS_PATH = gql`
-  query Query {
-    posts {
-      id
-    }
-  }
-`;
-
-export async function getStaticPaths() {
-  const apolloClient = initializeApollo();
-
-  const {
-    data: { posts },
-  } = await apolloClient.query({
-    query: ALL_POSTS_PATH,
-  });
-
-  const paths = posts.map((x) => ({
-    params: { id: x.id + "" },
-  }));
-
-  return {
-    paths,
-    fallback: false, // false or 'blocking'
-  };
-}
 const POST_BY_ID = gql`
   query Query($postByIdId: Int!) {
     postById(id: $postByIdId) {
@@ -67,7 +41,8 @@ const POST_BY_ID = gql`
     }
   }
 `;
-export async function getStaticProps({ params: { id } }) {
+
+export async function getServerSideProps({ query: { id } }) {
   const apolloClient = initializeApollo();
 
   const {
@@ -81,7 +56,6 @@ export async function getStaticProps({ params: { id } }) {
 
   return {
     props: { data: { ...postById } },
-    revalidate: 60,
   };
 }
 
