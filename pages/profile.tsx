@@ -92,9 +92,7 @@ const Profile = ({ session }) => {
           </Box>
         </Grid>
         <Grid item xs={4} sx={{ height: 1 }}>
-          <Avatar sx={{ height: 200, width: 200, mt: 2, ml: 2 }}>
-            <Image layout="fill" src={image} alt=""></Image>
-          </Avatar>
+          <Avatar src={image} sx={{ height: 200, width: 200, mt: 2, ml: 2 }} />{" "}
         </Grid>
       </Grid>
     </BaseWrap>
