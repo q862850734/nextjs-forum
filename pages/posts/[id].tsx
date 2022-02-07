@@ -3,6 +3,8 @@ import { gql, useQuery, useMutation } from "@apollo/client";
 import { initializeApollo } from "../../lib/apollo";
 import RouteLink from "components/RouteLink";
 import BasicBreadcrumbs from "components/BasicBreadcrumbs";
+import Loading from "components/Loading";
+import { useRouter } from "next/router";
 const ALL_POSTS_PATH = gql`
   query Query {
     posts {
@@ -75,14 +77,16 @@ export async function getStaticProps({ params: { id } }) {
       postByIdId: Number(id),
     },
   });
-  console.log(postById);
 
   return {
-    props: { data: { ...postById } }, // will be passed to the page component as props
+    props: { data: { ...postById } },
+    revalidate: 60,
   };
 }
 
 export default function Posts({ data }) {
+  const router = useRouter();
+  if (router.isFallback) return <Loading />;
   return (
     <Box
       component="article"
@@ -93,17 +97,19 @@ export default function Posts({ data }) {
         minHeight: 1,
       }}
     >
-      <BasicBreadcrumbs
-        {...{
-          links: [
-            {
-              href: "/",
-              title: data.forum.category.name,
-            },
-          ],
-          title: data.forum.title,
-        }}
-      />
+      {data?.forum && data.forum.title && (
+        <BasicBreadcrumbs
+          {...{
+            links: [
+              {
+                href: "/",
+                title: data.forum.category.name,
+              },
+            ],
+            title: data.forum.title,
+          }}
+        />
+      )}
       <Typography align="center" variant="h4" component="h2">
         {data.title}
       </Typography>
