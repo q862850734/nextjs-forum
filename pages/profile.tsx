@@ -1,13 +1,21 @@
 import React from "react";
-import { Box, Grid, TextField, Avatar, Button } from "@mui/material";
+import {
+  Box,
+  Grid,
+  TextField,
+  Avatar,
+  Button,
+  CircularProgress,
+} from "@mui/material";
 import BaseWrap from "components/BaseWrap";
 import { getSession } from "next-auth/react";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import { initializeApollo } from "../lib/apollo";
 import { useForm } from "react-hook-form";
 import Image from "next/image";
+import Loading from "components/Loading";
 
-const profile = ({ session }): React.Component => {
+const Profile = ({ session }) => {
   // const [setProfile,{data:d,loading:l,error:r}] = useMutation(gql;``)
   const { register, handleSubmit, formState } = useForm();
   const onSubmit = (e) => {
@@ -36,7 +44,8 @@ const profile = ({ session }): React.Component => {
       },
     }
   );
-  if (loading) return <p>loading...</p>;
+
+  if (loading) return <Loading />;
 
   const {
     userByEmail: { image, name, password, profile },
@@ -91,7 +100,7 @@ const profile = ({ session }): React.Component => {
   );
 };
 
-export default profile;
+export default Profile;
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);

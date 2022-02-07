@@ -74,8 +74,6 @@ export async function getStaticProps({ params: { id } }) {
 }
 
 export default function Posts({ data }) {
-  console.log(data);
-
   return (
     <Box
       component="article"

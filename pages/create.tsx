@@ -16,6 +16,7 @@ import { useForm, Controller } from "react-hook-form";
 import { Forum, Tag } from "@prisma/client";
 
 import TagsInput from "components/TagsInput";
+import Loading from "components/Loading";
 
 const Editor = dynamic(() => import("components/Editor"), {
   ssr: false,
@@ -79,7 +80,7 @@ export default function Create({ session }) {
     }
   );
 
-  if (loading) return <div>Loading</div>;
+  if (loading) return <Loading />;
   const { forums, tags } = data;
 
   const defaultProps = (data, key) => {
