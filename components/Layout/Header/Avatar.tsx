@@ -46,15 +46,7 @@ export default function Avatar() {
   return (
     <Box>
       <IconButton onClick={handleClick}>
-        <UserAvatar>
-          {session?.user && (
-            <Image
-              layout="fill"
-              src={session.user["image"]}
-              alt={session.user["name"]}
-            />
-          )}
-        </UserAvatar>
+        <UserAvatar src={session?.user["image"] || ""}></UserAvatar>
       </IconButton>
       <Menu
         id="basic-menu"
