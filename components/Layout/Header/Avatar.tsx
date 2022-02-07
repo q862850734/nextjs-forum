@@ -1,6 +1,6 @@
 import { useState, MouseEvent } from "react";
 
-import { signIn, signOut, getSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 import RouteLink from "../../RouteLink";
 import {
@@ -31,19 +31,7 @@ function Item({ href, title, children }) {
     </MenuItem>
   );
 }
-export async function getServerSideProps(ctx) {
-  const session = await getSession(ctx);
-  if (!session) {
-    return {
-      props: {},
-    };
-  }
-  const { user } = session;
-  return {
-    props: { user },
-  };
-}
-export default function Avatar({ session }) {
+export default function Avatar() {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -52,12 +40,13 @@ export default function Avatar({ session }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const { data: session, status } = useSession();
 
   return (
     <Box>
       <IconButton onClick={handleClick}>
         <UserAvatar>
-          {session && (
+          {session?.user && (
             <Image
               layout="fill"
               src={session.user["image"]}
@@ -87,10 +76,10 @@ export default function Avatar({ session }) {
         </Item>
         <Divider />
         <Item
-          href={"/api/auth/" + (session ? "signout" : "signin")}
-          title={session ? "退出登录" : "登录/注册"}
+          href={"/api/auth/" + (session?.user ? "signout" : "signin")}
+          title={session?.user ? "退出登录" : "登录/注册"}
         >
-          {session ? <LogoutIcon /> : <LoginIcon />}
+          {session?.user ? <LogoutIcon /> : <LoginIcon />}
         </Item>
       </Menu>
     </Box>
