@@ -32,7 +32,7 @@ const CREATE_POST = gql`
   }
 `;
 
-export default function Create({ token }) {
+export default function Create({ session }) {
   const [forumData, setData] = useState({});
   useEffect(() => {
     if (forumData["title"]) {
@@ -99,7 +99,7 @@ export default function Create({ token }) {
       }}
       onSubmit={handleSubmit(onSubmit)}
     >
-      <Typography>{token.name}</Typography>
+      <Typography>{session.user.name}</Typography>
       <Autocomplete
         {...defaultProps(forums, "title")}
         disablePortal
@@ -169,8 +169,9 @@ export default function Create({ token }) {
 }
 const secret = process.env.SECRET;
 export async function getServerSideProps({ req }) {
+  const session = await getSession({ req });
   const token = await getToken({ req, secret });
-  if (!token) {
+  if (!session) {
     return {
       redirect: {
         destination: "/api/auth/signin",
@@ -180,7 +181,7 @@ export async function getServerSideProps({ req }) {
   }
   return {
     props: {
-      token,
+      session,
     },
   };
 }

@@ -41,7 +41,13 @@ export default NextAuth({
     secret: process.env.SECRET,
   },
   pages: {},
-  callbacks: {},
+  callbacks: {
+    async session({ session, token, user }) {
+      console.log(session, token, user);
+
+      return session;
+    },
+  },
   events: {},
 
   // Enable debug messages in the console if you are having problems

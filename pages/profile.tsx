@@ -16,7 +16,7 @@ import { useForm } from "react-hook-form";
 import Image from "next/image";
 import Loading from "components/Loading";
 
-const Profile = ({ token }) => {
+const Profile = ({ session }) => {
   // const [setProfile,{data:d,loading:l,error:r}] = useMutation(gql;``)
   const { register, handleSubmit, formState } = useForm();
   const onSubmit = (e) => {
@@ -41,7 +41,7 @@ const Profile = ({ token }) => {
     `,
     {
       variables: {
-        email: token.email,
+        email: session.user["email"],
       },
     }
   );
@@ -102,12 +102,11 @@ const Profile = ({ token }) => {
 };
 
 export default Profile;
-const secret = process.env.SECRET;
-export async function getServerSideProps({ req }) {
-  // const session = await getSession(context);
-  const token = await getToken({ req, secret });
 
-  if (!token) {
+export async function getServerSideProps({ req }) {
+  const session = await getSession({ req });
+
+  if (!session) {
     return {
       redirect: {
         destination: "/api/auth/signin",
@@ -117,7 +116,7 @@ export async function getServerSideProps({ req }) {
   }
   return {
     props: {
-      token,
+      session,
     },
   };
 }
