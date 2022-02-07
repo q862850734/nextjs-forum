@@ -9,7 +9,7 @@ import "../styles/globals.css";
 function MyApp({ Component, pageProps }: AppProps) {
   const apolloClient = useApollo(pageProps);
   return (
-    <SessionProvider session={pageProps.session}>
+    <SessionProvider session={pageProps.session} refetchInterval={0}>
       <ApolloProvider client={apolloClient}>
         <AppProvider>
           <Layout>

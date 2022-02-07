@@ -32,6 +32,8 @@ function Item({ href, title, children }) {
   );
 }
 export default function Avatar() {
+  const { data: session, status } = useSession();
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -40,7 +42,6 @@ export default function Avatar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const { data: session, status } = useSession();
 
   return (
     <Box>
