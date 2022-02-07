@@ -13,7 +13,7 @@ const ALL_POSTS_PATH = gql`
   }
 `;
 
-export async function getStaticPaths(t) {
+export async function getStaticPaths() {
   const apolloClient = initializeApollo();
 
   const {
@@ -25,6 +25,7 @@ export async function getStaticPaths(t) {
   const paths = posts.map((x) => ({
     params: { id: x.id + "" },
   }));
+
   return {
     paths,
     fallback: false, // false or 'blocking'
