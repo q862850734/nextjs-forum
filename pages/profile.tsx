@@ -9,13 +9,14 @@ import {
 } from "@mui/material";
 import BaseWrap from "components/BaseWrap";
 import { getSession } from "next-auth/react";
+import { getToken } from "next-auth/jwt";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import { initializeApollo } from "../lib/apollo";
 import { useForm } from "react-hook-form";
 import Image from "next/image";
 import Loading from "components/Loading";
 
-const Profile = ({ session }) => {
+const Profile = ({ token }) => {
   // const [setProfile,{data:d,loading:l,error:r}] = useMutation(gql;``)
   const { register, handleSubmit, formState } = useForm();
   const onSubmit = (e) => {
@@ -40,7 +41,7 @@ const Profile = ({ session }) => {
     `,
     {
       variables: {
-        email: session.user["email"],
+        email: token.email,
       },
     }
   );
@@ -101,11 +102,12 @@ const Profile = ({ session }) => {
 };
 
 export default Profile;
+const secret = process.env.SECRET;
+export async function getServerSideProps({ req }) {
+  // const session = await getSession(context);
+  const token = await getToken({ req, secret });
 
-export async function getServerSideProps(context) {
-  const session = await getSession(context);
-
-  if (!session) {
+  if (!token) {
     return {
       redirect: {
         destination: "/api/auth/signin",
@@ -115,7 +117,7 @@ export async function getServerSideProps(context) {
   }
   return {
     props: {
-      session,
+      token,
     },
   };
 }

@@ -7,6 +7,7 @@ import {
   TextField,
   Chip,
 } from "@mui/material";
+import { getToken } from "next-auth/jwt";
 import { getSession } from "next-auth/react";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import { initializeApollo } from "../lib/apollo";
@@ -31,7 +32,7 @@ const CREATE_POST = gql`
   }
 `;
 
-export default function Create({ session }) {
+export default function Create({ token }) {
   const [forumData, setData] = useState({});
   useEffect(() => {
     if (forumData["title"]) {
@@ -98,7 +99,7 @@ export default function Create({ session }) {
       }}
       onSubmit={handleSubmit(onSubmit)}
     >
-      <Typography>{session.user.name}</Typography>
+      <Typography>{token.name}</Typography>
       <Autocomplete
         {...defaultProps(forums, "title")}
         disablePortal
@@ -166,11 +167,10 @@ export default function Create({ session }) {
     </Box>
   );
 }
-
-export async function getServerSideProps(context) {
-  const session = await getSession(context);
-
-  if (!session) {
+const secret = process.env.SECRET;
+export async function getServerSideProps({ req }) {
+  const token = await getToken({ req, secret });
+  if (!token) {
     return {
       redirect: {
         destination: "/api/auth/signin",
@@ -180,7 +180,7 @@ export async function getServerSideProps(context) {
   }
   return {
     props: {
-      session,
+      token,
     },
   };
 }
