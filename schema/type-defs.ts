@@ -301,14 +301,18 @@ export const Query = objectType({
             tags: true,
           },
         });
-        await prisma.post.update({
-          where: { id },
-          data: {
-            viewCount: {
-              increment: 1,
+        try {
+          await prisma.post.update({
+            where: { id },
+            data: {
+              viewCount: {
+                increment: 1,
+              },
             },
-          },
-        });
+          });
+        } catch (e) {
+          console.log(e);
+        }
         return post;
       },
     });
@@ -331,7 +335,14 @@ export const Query = objectType({
       async resolve(_, { name }, { prisma }) {
         return prisma.tag.findUnique({
           where: { name },
-          include: { posts: { include: { like: true } } },
+          include: {
+            posts: {
+              orderBy: {
+                createdAt: "desc",
+              },
+              include: { like: true },
+            },
+          },
         });
       },
     });
@@ -370,7 +381,14 @@ export const Query = objectType({
       async resolve(_, { id }, { prisma }) {
         return await prisma.forum.findUnique({
           where: { id },
-          include: { posts: { include: { like: true } } },
+          include: {
+            posts: {
+              orderBy: {
+                createdAt: "desc",
+              },
+              include: { like: true },
+            },
+          },
         });
       },
     });

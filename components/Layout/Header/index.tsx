@@ -7,9 +7,9 @@ import Palette from "./Palette";
 
 const ResponsiveAppBar = () => {
   return (
-    <AppBar position="static" sx={{ height: "6vh", alignItems: "center" }}>
+    <AppBar position="static" sx={{ alignItems: "center" }}>
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
+        <Toolbar disableGutters sx={{ height: "6vh" }}>
           <Typography
             variant="h6"
             noWrap

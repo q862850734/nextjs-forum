@@ -1,5 +1,6 @@
 import { Octokit } from "@octokit/core";
 import { MediaType } from "braft-editor";
+import toast from "react-hot-toast";
 
 export const editorUploadFn: MediaType["uploadFn"] = ({
   file,
@@ -21,7 +22,8 @@ export const editorUploadFn: MediaType["uploadFn"] = ({
         },
       });
     })
-    .catch((err) => {
+    .catch(() => {
+      toast.error("上传失败");
       error({
         msg: "上传失败",
       });
@@ -31,7 +33,7 @@ export const editorUploadFn: MediaType["uploadFn"] = ({
 const uploadFetch = async (file: File, path: string) => {
   const content = await getBase64(file);
 
-  return await fetch("/api/upload", {
+  return fetch("/api/upload", {
     method: "post",
     headers: {
       "Content-Type": "application/json",

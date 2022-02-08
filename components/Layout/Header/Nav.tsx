@@ -36,10 +36,7 @@ export default function Nav() {
     <>
       <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
         {pages.map(({ title, href }) => (
-          <Button
-            key={title + href}
-            sx={{ my: 2, color: "white", display: "block" }}
-          >
+          <Button key={title + href} sx={{ color: "white", display: "block" }}>
             <RouteLink title={title} href={href} />
           </Button>
         ))}

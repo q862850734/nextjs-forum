@@ -27,6 +27,7 @@ const FORUM_BY_ID = gql`
         viewCount
         likesCount
         isLiked
+        createdAt
         like {
           email
           image
@@ -50,8 +51,15 @@ export async function getServerSideProps({ req, query: { id } }) {
       forumByIdId: Number(id),
     },
   });
+  if (!forum)
+    return {
+      redirect: {
+        destination: "/404",
+        permanent: false,
+      },
+    };
 
-  if (session && forum)
+  if (session)
     return {
       props: {
         forum: {

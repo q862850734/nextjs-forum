@@ -4,6 +4,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Header from "./Header";
+import { Toaster } from "react-hot-toast";
 
 const Layout = ({ children, title = "Next Forum" }) => {
   return (
@@ -28,6 +29,7 @@ const Layout = ({ children, title = "Next Forum" }) => {
         >
           {children}
         </Container>
+        <Toaster position="top-center" reverseOrder={false} />
       </Box>
     </React.Fragment>
   );

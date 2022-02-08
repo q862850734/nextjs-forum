@@ -5,6 +5,7 @@ import RouteLink from "components/RouteLink";
 import BasicBreadcrumbs from "components/BasicBreadcrumbs";
 import Loading from "components/Loading";
 import { useRouter } from "next/router";
+import toast from "react-hot-toast";
 
 const POST_BY_ID = gql`
   query Query($post_id: Int!) {
@@ -53,6 +54,13 @@ export async function getServerSideProps({ query: { id } }) {
     },
   });
 
+  if (!postById)
+    return {
+      redirect: {
+        destination: "/404",
+        permanent: false,
+      },
+    };
   return {
     props: { data: { ...postById } },
   };
@@ -60,7 +68,7 @@ export async function getServerSideProps({ query: { id } }) {
 
 export default function Posts({ data }) {
   const router = useRouter();
-  if (router.isFallback) return <Loading />;
+  if (!data) if (router.isFallback) return <Loading />;
   return (
     <Box
       component="article"

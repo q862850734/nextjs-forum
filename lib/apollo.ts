@@ -7,6 +7,10 @@ import isEqual from "lodash/isEqual";
 export const APOLLO_STATE_PROP_NAME = "__APOLLO_STATE__";
 
 let apolloClient;
+const host =
+  process.env.NODE_ENV === "development"
+    ? "http://localhost:3000"
+    : "https://https://nextjs-forum.vercel.app";
 /**
  * 创建 apollo 客户端新实例
  * @returns
@@ -15,7 +19,7 @@ function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
     link: createHttpLink({
-      uri: "http://localhost:3000/api/graphql", //https://nextjs-forum.vercel.app
+      uri: `${host}/api/graphql`,
       credentials: "same-origin",
     }),
     cache: new InMemoryCache({

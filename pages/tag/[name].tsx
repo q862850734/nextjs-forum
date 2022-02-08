@@ -5,6 +5,7 @@ import { Box, Typography } from "@mui/material";
 import { getSession } from "next-auth/react";
 import BaseCard from "components/BaseCard";
 import PostCard from "components/PostCard";
+import HeadTitle from "components/HeadTitle";
 
 const TAG_BY_NAME = gql`
   query Query($name: String!) {
@@ -19,6 +20,7 @@ const TAG_BY_NAME = gql`
         url
         thumbnail
         viewCount
+        createdAt
         likesCount
         isLiked
         author {
@@ -63,6 +65,7 @@ export async function getServerSideProps({ req, query: { name } }) {
 export default function Forum({ tagPosts: tag }) {
   return (
     <>
+      <HeadTitle title={"#" + tag?.name || "Next"} />
       <Box
         sx={{
           width: 1,

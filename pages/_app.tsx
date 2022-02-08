@@ -3,7 +3,8 @@ import { SessionProvider } from "next-auth/react";
 import { ApolloProvider } from "@apollo/client";
 import Layout from "components/Layout";
 import { AppProvider } from "components/AppProvider";
-import { initializeApollo, useApollo } from "../lib/apollo";
+import { useApollo } from "../lib/apollo";
+
 import "../styles/globals.css";
 
 function MyApp({ Component, pageProps }: AppProps) {
