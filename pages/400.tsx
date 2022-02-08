@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-export default function Custom404() {
+export default function Custom400() {
   return (
     <Box>
       <Typography>404</Typography>

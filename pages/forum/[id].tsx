@@ -41,7 +41,6 @@ const FORUM_BY_ID = gql`
 
 export async function getServerSideProps({ req, query: { id } }) {
   const session = await getSession({ req });
-  console.log(session);
 
   const {
     data: { forumById: forum },
@@ -52,7 +51,7 @@ export async function getServerSideProps({ req, query: { id } }) {
     },
   });
 
-  if (session)
+  if (session && forum)
     return {
       props: {
         forum: {
