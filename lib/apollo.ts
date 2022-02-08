@@ -1,10 +1,5 @@
 import { useMemo } from "react";
-import {
-  ApolloClient,
-  createHttpLink,
-  HttpLink,
-  InMemoryCache,
-} from "@apollo/client";
+import { ApolloClient, createHttpLink, InMemoryCache } from "@apollo/client";
 import { concatPagination } from "@apollo/client/utilities";
 import merge from "deepmerge";
 import isEqual from "lodash/isEqual";
@@ -19,8 +14,8 @@ let apolloClient;
 function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === "undefined",
-    link: new HttpLink({
-      uri: "https://nextjs-forum.vercel.app",
+    link: createHttpLink({
+      uri: "http://localhost:3000/api/graphql", //https://nextjs-forum.vercel.app
       credentials: "same-origin",
     }),
     cache: new InMemoryCache({

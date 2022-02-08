@@ -1,36 +1,40 @@
-import React from "react";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
+import * as React from "react";
+
+import { AppBar, Toolbar, Typography, Container, Stack } from "@mui/material";
+import User from "./User";
 import Nav from "./Nav";
-import Avatar from "./Avatar";
 import Palette from "./Palette";
 
-export default function index({ sx = {} }) {
+const ResponsiveAppBar = () => {
   return (
-    <Box
-      sx={{
-        boxShadow: 1,
-        ...sx,
-      }}
-      component="header"
-    >
-      <Container
-        maxWidth="xl"
-        sx={{
-          height: 1,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
+    <AppBar position="static" sx={{ height: "6vh", alignItems: "center" }}>
+      <Container maxWidth="xl">
+        <Toolbar disableGutters>
+          <Typography
+            variant="h6"
+            noWrap
+            component="div"
+            sx={{ mr: 2, display: { xs: "none", md: "flex" } }}
+          >
+            Next
+          </Typography>
 
-          color: "primary.contrastText",
-        }}
-      >
-        <Nav />
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <Palette />
-          <Avatar />
-        </Box>
+          <Nav />
+          <Typography
+            variant="h6"
+            noWrap
+            component="h1"
+            sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}
+          >
+            Next
+          </Typography>
+          <Stack direction="row" spacing={2}>
+            <Palette />
+            <User />
+          </Stack>
+        </Toolbar>
       </Container>
-    </Box>
+    </AppBar>
   );
-}
+};
+export default ResponsiveAppBar;

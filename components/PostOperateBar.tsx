@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 interface Props {
   id: number;
   viewCount: number;
+  isLiked: boolean;
   like: any;
 }
 const THUMB = gql`
@@ -25,15 +26,13 @@ const THUMB = gql`
     }
   }
 `;
-const Operate = ({ id, viewCount, like }: Props) => {
+const Operate = ({ id, viewCount, isLiked, like }: Props) => {
   const { data: session, status } = useSession();
   const [thumb, { data, loading, error }] = useMutation(THUMB);
-  const [isLiked, setLike] = useState(false);
+  const [likeState, setLike] = useState(false);
   const [likeCount, setCount] = useState(0);
   useEffect(() => {
-    setLike(
-      like.length > 0 && like.filter((x) => x.email == session?.user["email"])
-    );
+    setLike(isLiked);
     setCount(like?.length);
   }, []);
 
@@ -41,17 +40,17 @@ const Operate = ({ id, viewCount, like }: Props) => {
     thumb({
       variables: {
         thumbId: id,
-        type: !isLiked,
+        type: !likeState,
       },
     }).then(() => {
-      setLike(!isLiked);
-      setCount((v) => (isLiked ? v - 1 : v + 1));
+      setLike(!likeState);
+      setCount((v) => (likeState ? v - 1 : v + 1));
     });
   };
   return (
     <Stack direction="row" spacing={2}>
       <Stack direction="row" spacing={1}>
-        {isLiked ? (
+        {likeState ? (
           <ThumbUpIcon onClick={clickHandle} />
         ) : (
           <ThumbUpAltOutlinedIcon onClick={clickHandle} />

@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Stack, Grid } from "@mui/material";
 import RouteLink from "../RouteLink";
 import LocalFireDepartmentIcon from "@mui/icons-material/LocalFireDepartment";
 import { Post } from "@prisma/client";
@@ -11,26 +11,37 @@ export const HotList = memo(function HotList({ data }: Props) {
     <Box
       sx={{
         p: 2,
-        height: 1,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-around",
-        "&>aside": {
-          display: "flex",
-          alignItems: "center",
-          height: 1,
-        },
       }}
     >
       <Typography component="h2" variant="h4">
         热门文章
       </Typography>
-      {data.map((x, i) => (
-        <Box key={x.id} component="aside">
-          <LocalFireDepartmentIcon />
-          <RouteLink href={"/posts/" + x.id} title={i + 1 + ". " + x.title} />
-        </Box>
-      ))}
+      <Grid
+        container
+        direction="row"
+        justifyContent="flex-start"
+        alignItems="stretch"
+        columns={{ xs: 4, md: 12 }}
+      >
+        {data.map((x, i) => (
+          <Grid
+            direction="row"
+            spacing={3}
+            key={x.id}
+            xs={2}
+            md={12}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              py: 2,
+              px: 1,
+            }}
+          >
+            <LocalFireDepartmentIcon />
+            <RouteLink href={"/posts/" + x.id} title={i + 1 + ". " + x.title} />
+          </Grid>
+        ))}
+      </Grid>
     </Box>
   );
 });

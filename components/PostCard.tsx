@@ -24,9 +24,9 @@ export const PostCard = ({
       sx={{
         p: 2,
         mb: 2,
-        bgcolor: "background.paper",
-        borderRadius: 1,
+        border: 1,
         display: "flex",
+        borderRadius: 5,
       }}
       component="section"
     >
@@ -58,7 +58,14 @@ export const PostCard = ({
         <PostOperateBar {...{ id, viewCount, isLiked, like }} />
       </Box>
       <Box sx={{ height: 150 }}>
-        {thumbnail && <Image width={150} height={150} src={thumbnail}></Image>}
+        {thumbnail && (
+          <Image
+            alt={description}
+            width={150}
+            height={150}
+            src={thumbnail}
+          ></Image>
+        )}
       </Box>
     </Box>
   );

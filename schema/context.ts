@@ -1,6 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { Session } from "next-auth";
 import { getSession } from "next-auth/react";
+import { getToken } from "next-auth/jwt";
 import prisma from "../lib/prisma";
 
 export type Context = {
@@ -9,8 +10,6 @@ export type Context = {
 };
 
 export async function createContext({ req }): Promise<Context> {
-  // console.log(req);
-
   const session = await getSession({ req });
 
   if (!session) return { prisma };

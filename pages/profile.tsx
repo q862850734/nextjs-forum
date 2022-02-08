@@ -11,7 +11,6 @@ import BaseWrap from "components/BaseWrap";
 import { getSession } from "next-auth/react";
 import { getToken } from "next-auth/jwt";
 import { gql, useQuery, useMutation } from "@apollo/client";
-import { initializeApollo } from "../lib/apollo";
 import { useForm } from "react-hook-form";
 import Image from "next/image";
 import Loading from "components/Loading";

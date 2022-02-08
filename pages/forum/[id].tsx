@@ -1,19 +1,16 @@
-import type { NextPage } from "next";
-
-import { gql, useQuery } from "@apollo/client";
+import { gql } from "@apollo/client";
+// import apolloClient from "../../lib/apollo";
 import { initializeApollo } from "../../lib/apollo";
-import { Box, Typography } from "@mui/material";
-import { useRouter } from "next/router";
+import { Box } from "@mui/material";
 
 import BaseCard from "components/BaseCard";
 import { ForumHead } from "components/Forum";
-import RouteLink from "components/RouteLink";
 import HeadTitle from "components/HeadTitle";
 import PostCard from "components/PostCard";
-import { useSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
 
 const FORUM_BY_ID = gql`
-  query ForumById($forumByIdId: Int!) {
+  query Query($forumByIdId: Int!) {
     forumById(id: $forumByIdId) {
       id
       title
@@ -42,24 +39,42 @@ const FORUM_BY_ID = gql`
   }
 `;
 
-export async function getServerSideProps({ query: { forum } }) {
-  const apolloClient = initializeApollo();
+export async function getServerSideProps({ req, query: { id } }) {
+  const session = await getSession({ req });
+  console.log(session);
 
   const {
-    data: { forumById },
-  } = await apolloClient.query({
+    data: { forumById: forum },
+  } = await initializeApollo().query({
     query: FORUM_BY_ID,
     variables: {
-      forumByIdId: Number(forum),
+      forumByIdId: Number(id),
     },
   });
 
-  return { props: { forumById } };
+  if (session)
+    return {
+      props: {
+        forum: {
+          ...forum,
+          posts: forum.posts.map((x) => ({
+            ...x,
+            isLiked:
+              x.like.length > 0 &&
+              x.like.some((e) => e.email === session?.user["email"]),
+          })),
+        },
+      },
+    };
+  return { props: { forum } };
 }
 
-export default function Forum({ forumById: forum }) {
+export default function Forum({ forum }) {
+  console.log(forum);
+
   return (
     <>
+      <HeadTitle title={forum.title} />
       <Box
         sx={{
           width: 1,

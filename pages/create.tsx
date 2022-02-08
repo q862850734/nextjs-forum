@@ -10,7 +10,7 @@ import {
 import { getToken } from "next-auth/jwt";
 import { getSession } from "next-auth/react";
 import { gql, useQuery, useMutation } from "@apollo/client";
-import { throttle } from "lodash";
+// import apolloClient from "../lib/apollo";
 import { initializeApollo } from "../lib/apollo";
 
 import dynamic from "next/dynamic";
@@ -144,7 +144,7 @@ export default function Create({ session }) {
 const secret = process.env.SECRET;
 export async function getServerSideProps({ req }) {
   const session = await getSession({ req });
-  const token = await getToken({ req, secret });
+
   if (!session) {
     return {
       redirect: {

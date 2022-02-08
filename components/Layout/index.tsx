@@ -15,14 +15,14 @@ const Layout = ({ children, title = "Next Forum" }) => {
           height: 1,
         }}
       >
-        <Header sx={{ height: "6vh", bgcolor: "primary.main" }} />
+        <Header />
         <Container
           maxWidth="lg"
           sx={{
             width: 1,
             height: "94vh",
             p: 1,
-            overflow: "auto",
+            overflow: "overlay",
           }}
           component="main"
         >

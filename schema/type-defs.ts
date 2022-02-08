@@ -13,6 +13,7 @@ import {
 import { DateTimeResolver } from "graphql-scalars";
 export const DateTime = asNexusMethod(DateTimeResolver, "date");
 import crypto from "crypto";
+import { getSession } from "next-auth/react";
 // import { prisma } from "../lib/prisma";
 
 /* 账户 */
@@ -49,7 +50,7 @@ export const User = objectType({
     t.list.field("thumb_list", {
       type: "Post",
       async resolve({ id }, _args, { prisma }) {
-        return await prisma.user.findUnique({ where: { id } }).thumblist;
+        return await prisma.user.findUnique({ where: { id } }).thumb_list();
       },
     });
     t.field("createdAt", { type: "DateTime" });
@@ -246,13 +247,18 @@ export const Query = objectType({
     /* 查找所有文章 */
     t.nonNull.list.field("posts", {
       type: "Post",
-
-      async resolve(_, __, { prisma }) {
-        return prisma.post.findMany({
+      async resolve(_, __, { prisma, session }) {
+        const posts = await prisma.post.findMany({
           include: {
             tags: true,
           },
         });
+
+        if (!session) return posts;
+        return posts.map(
+          (x) =>
+            (x.isLiked = x.like.filter((e) => e.email === session.user.email))
+        );
       },
     });
     /* 查找热门文章 */
@@ -289,12 +295,21 @@ export const Query = objectType({
         id: nonNull(intArg()),
       },
       async resolve(_, { id }, { prisma }) {
-        return prisma.post.findUnique({
+        const post = await prisma.post.findUnique({
           where: { id },
           include: {
             tags: true,
           },
         });
+        await prisma.post.update({
+          where: { id },
+          data: {
+            viewCount: {
+              increment: 1,
+            },
+          },
+        });
+        return post;
       },
     });
     /* 查找所有标签 */
@@ -316,9 +331,7 @@ export const Query = objectType({
       async resolve(_, { name }, { prisma }) {
         return prisma.tag.findUnique({
           where: { name },
-          include: {
-            posts: true,
-          },
+          include: { posts: { include: { like: true } } },
         });
       },
     });
@@ -355,7 +368,10 @@ export const Query = objectType({
       },
 
       async resolve(_, { id }, { prisma }) {
-        return prisma.forum.findUnique({ where: { id } });
+        return await prisma.forum.findUnique({
+          where: { id },
+          include: { posts: { include: { like: true } } },
+        });
       },
     });
   },

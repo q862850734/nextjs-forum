@@ -17,7 +17,7 @@ export const ForumCategory = ({
         width: 1,
         boxShadow: 4,
         borderRadius: 3,
-        bgcolor: "primary.light",
+        border: 2,
         backgroundImage: icon ? `url(${icon})` : "",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "right top",
@@ -27,9 +27,14 @@ export const ForumCategory = ({
       <Typography variant="h5" component="h2">
         {name}
       </Typography>
-      <Grid container spacing={3}>
+      <Grid
+        container
+        direction="row"
+        justifyContent="flex-start"
+        alignItems="stretch"
+      >
         {forum.map((x) => (
-          <ForumCard key={x.id} data={x} option={{ xs: 4 }} />
+          <ForumCard key={x.id} data={x} option={{ xs: 6, md: 4 }} />
         ))}
       </Grid>
     </Box>

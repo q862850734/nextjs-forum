@@ -1,13 +1,14 @@
 import { Box, Typography, Chip, Stack } from "@mui/material";
 import { gql, useQuery, useMutation } from "@apollo/client";
-import { initializeApollo } from "../../lib/apollo";
+import { initializeApollo } from "lib/apollo";
 import RouteLink from "components/RouteLink";
 import BasicBreadcrumbs from "components/BasicBreadcrumbs";
 import Loading from "components/Loading";
 import { useRouter } from "next/router";
+
 const POST_BY_ID = gql`
-  query Query($postByIdId: Int!) {
-    postById(id: $postByIdId) {
+  query Query($post_id: Int!) {
+    postById(id: $post_id) {
       id
       authorId
       title
@@ -43,14 +44,12 @@ const POST_BY_ID = gql`
 `;
 
 export async function getServerSideProps({ query: { id } }) {
-  const apolloClient = initializeApollo();
-
   const {
     data: { postById },
-  } = await apolloClient.query({
+  } = await initializeApollo().query({
     query: POST_BY_ID,
     variables: {
-      postByIdId: Number(id),
+      post_id: Number(id),
     },
   });
 

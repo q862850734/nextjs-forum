@@ -1,13 +1,9 @@
-import type { NextPage } from "next";
-
 import { gql, useQuery } from "@apollo/client";
+// import apolloClient from "../../lib/apollo";
 import { initializeApollo } from "../../lib/apollo";
 import { Box, Typography } from "@mui/material";
-import { useRouter } from "next/router";
-
+import { getSession } from "next-auth/react";
 import BaseCard from "components/BaseCard";
-import { ForumHead } from "components/Forum";
-import RouteLink from "components/RouteLink";
 import PostCard from "components/PostCard";
 
 const TAG_BY_NAME = gql`
@@ -28,22 +24,38 @@ const TAG_BY_NAME = gql`
         author {
           name
         }
+        like {
+          email
+        }
       }
     }
   }
 `;
 
-export async function getServerSideProps({ query: { name } }) {
-  const apolloClient = initializeApollo();
-
+export async function getServerSideProps({ req, query: { name } }) {
+  const session = await getSession({ req });
   const {
     data: { tagPosts },
-  } = await apolloClient.query({
+  } = await initializeApollo().query({
     query: TAG_BY_NAME,
     variables: {
       name,
     },
   });
+  if (session)
+    return {
+      props: {
+        tagPosts: {
+          ...tagPosts,
+          posts: tagPosts.posts.map((x) => ({
+            ...x,
+            isLiked:
+              x.like.length > 0 &&
+              x.like.some((e) => e.email === session?.user["email"]),
+          })),
+        },
+      },
+    };
 
   return { props: { tagPosts } };
 }

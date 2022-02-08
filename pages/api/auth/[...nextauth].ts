@@ -8,7 +8,7 @@ import EmailProvider from "next-auth/providers/email";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 // import AppleProvider from "next-auth/providers/apple"
 
-import prisma from "../../../lib/prisma";
+import prisma from "lib/prisma";
 
 export default NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -27,7 +27,6 @@ export default NextAuth({
     GithubProvider({
       clientId: process.env.GITHUB_ID,
       clientSecret: process.env.GITHUB_SECRET,
-      // https://docs.github.com/en/developers/apps/building-oauth-apps/scopes-for-oauth-apps
       // @ts-ignore
       scope: "read:user",
     }),
@@ -51,5 +50,10 @@ export default NextAuth({
   events: {},
 
   // Enable debug messages in the console if you are having problems
-  debug: false,
+  debug: true,
+  theme: {
+    colorScheme: "light", // "auto" | "dark" | "light"
+    brandColor: "", // Hex color code
+    logo: "", // Absolute URL to image
+  },
 });

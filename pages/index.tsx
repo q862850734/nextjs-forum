@@ -3,23 +3,22 @@ import { memo } from "react";
 import { BoxProps } from "@mui/material/Box";
 
 import { gql } from "@apollo/client";
+// import apolloClient from "../lib/apollo";
 import { initializeApollo } from "../lib/apollo";
 import HeadTitle from "components/HeadTitle";
 import SwipeBanner from "components/SwipeBanner";
 import { ForumCategory, HotList } from "components/Home";
-import { getSession } from "next-auth/react";
 
 const Item = memo(function item(props: BoxProps) {
   const { sx, ...other } = props;
   return (
     <Box
       sx={{
-        p: 1,
-        m: 1,
         borderRadius: 2,
         fontSize: "0.875rem",
         fontWeight: "700",
-        height: 1,
+
+        height: { xs: 240, md: 1 },
         ...sx,
       }}
       {...other}
@@ -55,25 +54,16 @@ const HOME_INFO = gql`
   }
 `;
 
-export async function getServerSideProps(ctx) {
-  const session = await getSession(ctx);
-  const apolloClient = initializeApollo();
-
-  const { data } = await apolloClient.query({
+export async function getServerSideProps() {
+  const { data } = await initializeApollo().query({
     query: HOME_INFO,
     variables: {
       take: 6,
     },
   });
 
-  if (!session) {
-    return {
-      props: { data },
-    };
-  }
-  const { user } = session;
   return {
-    props: { user, data },
+    props: { data },
   };
 }
 export default function Home({ data }) {
@@ -82,53 +72,52 @@ export default function Home({ data }) {
   return (
     <>
       <HeadTitle title="首页" />
+      <Grid
+        container
+        direction="row"
+        spacing={{ xs: 2, md: 3 }}
+        alignItems="stretch"
+        sx={{
+          width: 1,
+        }}
+      >
+        <Grid item xs={12} md={8}>
+          <Item
+            sx={{
+              width: 1,
+              background:
+                "url(https://uploadstatic.mihoyo.com/contentweb/20200211/2020021114220951905.jpg)",
+            }}
+          >
+            <SwipeBanner banners={banners} />
+          </Item>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          {/* sx={{ bgcolor: "primary.light" }} */}
+          <Item sx={{ border: 2 }}>
+            <HotList data={hotPosts} />
+          </Item>
+        </Grid>
+      </Grid>
       <Box
         sx={{
           width: 1,
-          height: 1,
+          display: "grid",
+          gridAutoColumns: "1fr",
+          gap: 1,
         }}
-        component="main"
       >
-        <Grid
-          container
-          spacing={{ xs: 2, sm: 0.5, md: 1 }}
-          columns={{ xs: 4, sm: 8, md: 12 }}
+        <Item
           sx={{
-            width: 1,
-            height: 4 / 10,
+            gridRow: "2",
+            gridColumn: "span 3",
+            height: { xs: 1 / 5, md: 1 / 3 },
           }}
         >
-          <Grid item xs={4} sm={5} md={8}>
-            <Item
-              sx={{
-                background:
-                  "url(https://uploadstatic.mihoyo.com/contentweb/20200211/2020021114220951905.jpg)",
-              }}
-            >
-              <SwipeBanner banners={banners} />
-            </Item>
-          </Grid>
-          <Grid item xs={4} sm={3} md={4}>
-            <Item sx={{ bgcolor: "primary.light" }}>
-              <HotList data={hotPosts} />
-            </Item>
-          </Grid>
-        </Grid>
-        <Box
-          sx={{
-            width: 1,
-            height: 2 / 3,
-            display: "grid",
-            gridAutoColumns: "1fr",
-            gap: 1,
-          }}
-        >
-          <Item sx={{ gridRow: "2", gridColumn: "span 3", height: 1 / 3 }}>
-            {forumCategories.map((x) => (
-              <ForumCategory {...x} key={x.name} />
-            ))}
-          </Item>
-        </Box>
+          {forumCategories.map((x) => (
+            <ForumCategory {...x} key={x.name} />
+          ))}
+        </Item>
       </Box>
     </>
   );
