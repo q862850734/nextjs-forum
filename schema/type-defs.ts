@@ -338,7 +338,7 @@ export const Query = objectType({
           include: {
             posts: {
               orderBy: {
-                createdAt: "desc",
+                createdAt: "asc",
               },
               include: { like: true },
             },

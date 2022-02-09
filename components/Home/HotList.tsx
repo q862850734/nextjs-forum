@@ -26,7 +26,6 @@ export const HotList = memo(function HotList({ data }: Props) {
         {data.map((x, i) => (
           <Grid
             item
-            spacing={3}
             key={x.id}
             xs={2}
             md={12}

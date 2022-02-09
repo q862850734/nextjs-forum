@@ -166,7 +166,7 @@ async function main() {
               {
                 title: "@ctitle(3, 5)",
                 description: "@csentence()",
-                content: "@cparagraph(5)",
+                content: "@cparagraph(10)",
                 "viewCount|1-1000": 100,
                 "likesCount|1-1000": 100,
                 thumbnail: "http://placeimg.com/640/480",
