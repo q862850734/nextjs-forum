@@ -12,7 +12,7 @@ import { NexusGenObjects } from "../../@types/nexus-typegen";
 import PostCard from "components/PostCard";
 
 const USER_QUERY = gql`
-  query Query($email: String!) {
+  query ExampleQuery($email: String!) {
     userByEmail(email: $email) {
       name
       email
@@ -20,14 +20,19 @@ const USER_QUERY = gql`
       isBlocked
       createdAt
       posts {
-        id
         title
-        description
-        updatedAt
         thumbnail
+        description
+        id
         viewCount
-        likesCount
         isLiked
+        like {
+          email
+        }
+        createdAt
+        author {
+          name
+        }
       }
       profile {
         bio
@@ -41,18 +46,19 @@ type Props = NexusGenObjects["User"] & {
   posts?: [NexusGenObjects["Post"]];
   profile?: NexusGenObjects["Profile"];
 };
-const Index = ({ name, image, posts, profile }: Props) => {
+const Index = ({ name, email, image, posts, profile }: Props) => {
   return (
     <BaseWrap title={name + " - " + "的主页"}>
       <BaseCard>
         <BaseHead
-          title={name}
-          icon={image}
+          title={name || email}
+          icon={image || ""}
           description={profile ? profile.bio : "这个人什么都没写..."}
         ></BaseHead>
       </BaseCard>
+
       <BaseCard sx={{ flex: "1", overflow: "auto" }}>
-        {posts && posts.map((x) => <PostCard key={x.id} {...x} />)}
+        {posts.length > 0 && posts.map((x) => <PostCard key={x.id} {...x} />)}
       </BaseCard>
     </BaseWrap>
   );
@@ -79,6 +85,7 @@ export async function getServerSideProps(context: NextPageContext) {
       email: session.user["email"],
     },
   });
+  console.log(userByEmail);
 
   return {
     props: {

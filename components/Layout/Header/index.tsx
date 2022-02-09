@@ -8,8 +8,8 @@ import Palette from "./Palette";
 const ResponsiveAppBar = () => {
   return (
     <AppBar position="static" sx={{ alignItems: "center" }}>
-      <Container maxWidth="xl">
-        <Toolbar disableGutters sx={{ height: "6vh" }}>
+      <Container maxWidth="xl" sx={{ height: "8vh", minHeight: "8vh" }}>
+        <Toolbar disableGutters sx={{ height: "8vh", minHeight: "8vh" }}>
           <Typography
             variant="h6"
             noWrap

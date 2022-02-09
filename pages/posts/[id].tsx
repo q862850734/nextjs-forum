@@ -112,6 +112,7 @@ export default function Posts({ data }) {
           borderRadius: 2,
           my: 2,
         }}
+        className="braft-output-content"
         dangerouslySetInnerHTML={{ __html: data.content }}
       ></Box>
     </Box>

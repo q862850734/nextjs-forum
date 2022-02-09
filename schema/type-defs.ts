@@ -233,6 +233,9 @@ export const Query = objectType({
       async resolve(_, { email }, { prisma }) {
         return prisma.user.findUnique({
           where: { email },
+          include: {
+            posts: { select: { like: true } },
+          },
         });
       },
     });
@@ -340,7 +343,9 @@ export const Query = objectType({
               orderBy: {
                 createdAt: "asc",
               },
-              include: { like: true },
+              select: {
+                createdAt: true,
+              },
             },
           },
         });
@@ -386,7 +391,10 @@ export const Query = objectType({
               orderBy: {
                 createdAt: "desc",
               },
-              include: { like: true },
+              select: {
+                createdAt: true,
+                like: true,
+              },
             },
           },
         });

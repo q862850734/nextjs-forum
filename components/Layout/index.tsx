@@ -21,7 +21,7 @@ const Layout = ({ children, title = "Next Forum" }) => {
           maxWidth="lg"
           sx={{
             width: 1,
-            height: "94vh",
+            height: "92vh",
             p: 1,
             overflow: "overlay",
           }}

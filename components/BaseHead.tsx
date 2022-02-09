@@ -13,9 +13,7 @@ const BaseHead = ({ title, icon, description = "" }: Props) => {
         display: "flex",
       }}
     >
-      <Avatar sx={{ width: 100, height: 100 }}>
-        <Image layout="fill" src={icon} alt={title}></Image>
-      </Avatar>
+      <Avatar sx={{ width: 100, height: 100 }} src={icon} />
       <Box
         sx={{
           display: "flex",
