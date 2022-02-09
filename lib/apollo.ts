@@ -10,7 +10,7 @@ let apolloClient;
 const host =
   process.env.NODE_ENV === "development"
     ? "http://localhost:3000"
-    : "https://https://nextjs-forum.vercel.app";
+    : "https://nextjs-forum.vercel.app";
 /**
  * 创建 apollo 客户端新实例
  * @returns
