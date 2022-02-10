@@ -181,6 +181,7 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     addPost: NexusGenRootTypes['Post'] | null; // Post
+    setProfile: NexusGenRootTypes['User'] | null; // User
     thumb: NexusGenRootTypes['User'] | null; // User
     userSetPassword: NexusGenRootTypes['User'] | null; // User
   }
@@ -288,6 +289,7 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     addPost: 'Post'
+    setProfile: 'User'
     thumb: 'User'
     userSetPassword: 'User'
   }
@@ -363,6 +365,13 @@ export interface NexusGenArgTypes {
       forum?: string | null; // String
       tags?: Array<string | null> | null; // [String]
       title?: string | null; // String
+    }
+    setProfile: { // args
+      background?: string | null; // String
+      banner?: string | null; // String
+      bio?: string | null; // String
+      image?: string | null; // String
+      name?: string | null; // String
     }
     thumb: { // args
       id: number; // Int!

@@ -50,6 +50,7 @@ type ForumCategory {
 
 type Mutation {
   addPost(content: String, description: String, forum: String, tags: [String], title: String): Post
+  setProfile(background: String, banner: String, bio: String, image: String, name: String): User
   thumb(id: Int!, type: Boolean!): User
   userSetPassword(password: String!): User
 }

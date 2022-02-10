@@ -161,7 +161,9 @@ export const Tag = objectType({
     t.list.field("posts", {
       type: Post,
       async resolve({ id }, _args, { prisma }) {
-        return await prisma.tag.findUnique({ where: { id } }).posts();
+        return await prisma.tag
+          .findUnique({ where: { id } })
+          .posts({ orderBy: { createdAt: "desc" } });
       },
     });
   },
@@ -190,7 +192,11 @@ export const Forum = objectType({
     t.list.field("posts", {
       type: Post,
       async resolve({ id }, _args, { prisma }) {
-        return prisma.forum.findUnique({ where: { id } }).posts();
+        return prisma.forum
+          .findUnique({
+            where: { id },
+          })
+          .posts({ orderBy: { createdAt: "desc" } });
       },
     });
     t.field("category", {
@@ -341,7 +347,7 @@ export const Query = objectType({
           include: {
             posts: {
               orderBy: {
-                createdAt: "asc",
+                createdAt: "desc",
               },
               select: {
                 createdAt: true,
@@ -386,18 +392,8 @@ export const Query = objectType({
       async resolve(_, { id }, { prisma }) {
         return await prisma.forum.findUnique({
           where: { id },
-          include: {
-            posts: {
-              orderBy: {
-                createdAt: "desc",
-              },
-              select: {
-                createdAt: true,
-                like: true,
-              },
-            },
-          },
         });
+        s;
       },
     });
   },
@@ -425,6 +421,29 @@ export const Mutation = objectType({
         });
       },
     });
+    // 设置文档
+    t.field("setProfile", {
+      type: "User",
+      args: {
+        bio: stringArg(),
+        image: stringArg(),
+        name: stringArg(),
+        banner: stringArg(),
+        background: stringArg(),
+      },
+      async resolve(_, { image, name, ...profile }, { prisma, session }) {
+        if (!session) throw new Error(`您需要登录后才能执行操作`);
+        return await prisma.user.update({
+          where: { email: session.user.email },
+          data: {
+            name,
+            image,
+            profile,
+          },
+        });
+      },
+    });
+
     /* 点赞 */
     t.field("thumb", {
       type: "User",
